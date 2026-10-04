@@ -39,3 +39,9 @@ This project uses **Tailwind CSS v4** through the `@tailwindcss/vite` plugin con
 - Use double quotes for strings containing apostrophes (`"We're here to help"`), or escape them in single-quoted strings. An unescaped apostrophe in a single-quoted string breaks the build.
 - Ensure JSX tags are closed and braces are balanced.
 - Export components as default exports.
+
+## Memory & Preferences (Mem0 Integration)
+
+- Gemini Chat has direct access to Mem0 memory tools (`search_memories`, `get_memories`, `add_memory`).
+- Query Mem0 (`user_id: "god"`) when needing context on user preferences, design rules, or past decisions.
+- Save new user preferences, project conventions, and key decisions using `add_memory`.
