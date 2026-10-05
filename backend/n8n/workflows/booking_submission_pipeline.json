@@ -126,7 +126,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Los Suspiros del Mar <onboarding@resend.dev>\",\n  \"to\": [\"{{ $('Webhook Trigger').item.json.body.email }}\"],\n  \"subject\": \"Confirmación de Solicitud - Los Suspiros del Mar\",\n  \"html\": \"<h2>¡Gracias por contactarnos, {{ $('Webhook Trigger').item.json.body.name }}!</h2><p>Hemos recibido tu solicitud. Nos pondremos en contacto contigo pronto.</p>\"\n}",
+        "jsonBody": "={{ JSON.stringify({ from: \"Los Suspiros del Mar <onboarding@resend.dev>\", to: [$('Webhook Trigger').item.json.body.email], subject: \"Confirmación de Solicitud - Los Suspiros del Mar\", html: \"<h2>¡Gracias por contactarnos, \" + ($('Webhook Trigger').item.json.body.name ?? \"\") + \"!</h2><p>Hemos recibido tu solicitud. Nos pondremos en contacto contigo pronto.</p>\" }) }}",
         "options": {}
       },
       "id": "e4f2ac80-e222-4e0f-91d7-c008f5c9be7b",
@@ -163,7 +163,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"number\": \"51953677228\",\n  \"text\": \"🌊 *Nueva Solicitud - Los Suspiros del Mar* 🌊\\n\\n👤 *Nombre:* {{ $('Webhook Trigger').item.json.body.name }}\\n📧 *Email:* {{ $('Webhook Trigger').item.json.body.email }}\\n📞 *Teléfono:* {{ $('Webhook Trigger').item.json.body.phone }}\\n📋 *Tipo:* {{ $('Webhook Trigger').item.json.body.form_type }}\\n💬 *Mensaje:* {{ $('Webhook Trigger').item.json.body.message || 'Sin mensaje' }}\"\n}",
+        "jsonBody": "={{ JSON.stringify({ number: \"51953677228\", text: \"🌊 *Nueva Solicitud - Los Suspiros del Mar* 🌊\\n\\n👤 *Nombre:* \" + ($('Webhook Trigger').item.json.body.name ?? \"\") + \"\\n📧 *Email:* \" + ($('Webhook Trigger').item.json.body.email ?? \"\") + \"\\n📞 *Teléfono:* \" + ($('Webhook Trigger').item.json.body.phone ?? \"\") + \"\\n📋 *Tipo:* \" + ($('Webhook Trigger').item.json.body.form_type ?? \"\") + \"\\n💬 *Mensaje:* \" + ($('Webhook Trigger').item.json.body.message || \"Sin mensaje\") }) }}",
         "options": {},
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth"
@@ -202,7 +202,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"number\": \"12102912723\",\n  \"text\": \"🌊 *Nueva Solicitud - Los Suspiros del Mar* 🌊\\n\\n👤 *Nombre:* {{ $('Webhook Trigger').item.json.body.name }}\\n📧 *Email:* {{ $('Webhook Trigger').item.json.body.email }}\\n📞 *Teléfono:* {{ $('Webhook Trigger').item.json.body.phone }}\\n📋 *Tipo:* {{ $('Webhook Trigger').item.json.body.form_type }}\\n💬 *Mensaje:* {{ $('Webhook Trigger').item.json.body.message || 'Sin mensaje' }}\"\n}",
+        "jsonBody": "={{ JSON.stringify({ number: \"12102912723\", text: \"🌊 *Nueva Solicitud - Los Suspiros del Mar* 🌊\\n\\n👤 *Nombre:* \" + ($('Webhook Trigger').item.json.body.name ?? \"\") + \"\\n📧 *Email:* \" + ($('Webhook Trigger').item.json.body.email ?? \"\") + \"\\n📞 *Teléfono:* \" + ($('Webhook Trigger').item.json.body.phone ?? \"\") + \"\\n📋 *Tipo:* \" + ($('Webhook Trigger').item.json.body.form_type ?? \"\") + \"\\n💬 *Mensaje:* \" + ($('Webhook Trigger').item.json.body.message || \"Sin mensaje\") }) }}",
         "options": {},
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth"
@@ -241,7 +241,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"number\": \"{{ $('Webhook Trigger').item.json.body.phone ? $('Webhook Trigger').item.json.body.phone.replace(/[^0-9]/g, '') : '51918474414' }}\",\n  \"text\": \"🌊 *Los Suspiros del Mar* 🌊\\n\\n¡Hola {{ $('Webhook Trigger').item.json.body.name }}! Hemos recibido tu solicitud de {{ $('Webhook Trigger').item.json.body.form_type }}. Nos pondremos en contacto contigo a la brevedad.\"\n}",
+        "jsonBody": "={{ JSON.stringify({ number: ($('Webhook Trigger').item.json.body.phone ? String($('Webhook Trigger').item.json.body.phone).replace(/[^0-9]/g, \"\") : \"51918474414\"), text: \"🌊 *Los Suspiros del Mar* 🌊\\n\\n¡Hola \" + ($('Webhook Trigger').item.json.body.name ?? \"\") + \"! Hemos recibido tu solicitud de \" + ($('Webhook Trigger').item.json.body.form_type ?? \"\") + \". Nos pondremos en contacto contigo a la brevedad.\" }) }}",
         "options": {},
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth"
