@@ -32,3 +32,4 @@ tests/artifacts/
 
 # Playwright MCP snapshot artifacts
 .playwright-mcp/
+.dyad/
