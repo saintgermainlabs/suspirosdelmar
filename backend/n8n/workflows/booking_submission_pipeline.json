@@ -148,7 +148,7 @@
           "parameters": [
             {
               "name": "Authorization",
-              "value": "Bearer YOUR_RESEND_API_KEY"
+              "value": "Bearer {{ $env.RESEND_API_KEY }}"
             },
             {
               "name": "Content-Type",
@@ -174,7 +174,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://evo.sg-labs.xyz:8080/message/sendText/suspiros_instance",
+        "url": "https://evo.sg-labs.xyz/message/sendText/suspiros_instance",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -193,6 +193,7 @@
         "jsonBody": "={\n  \"number\": \"51953677228\",\n  \"text\": \"🌊 *Nueva Solicitud - Los Suspiros del Mar* 🌊\\n\\n👤 *Nombre:* {{ $('Webhook Trigger').item.json.body.name }}\\n📧 *Email:* {{ $('Webhook Trigger').item.json.body.email }}\\n📞 *Teléfono:* {{ $('Webhook Trigger').item.json.body.phone }}\\n📋 *Tipo:* {{ $('Webhook Trigger').item.json.body.form_type }}\\n💬 *Mensaje:* {{ $('Webhook Trigger').item.json.body.message || 'Sin mensaje' }}\"\n}",
         "options": {}
       },
+      "onError": "continueErrorOutput",
       "id": "77777777-7777-4777-8777-777777777777",
       "name": "Send WhatsApp Notification (Admin)",
       "type": "n8n-nodes-base.httpRequest",
@@ -205,7 +206,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://evo.sg-labs.xyz:8080/message/sendText/suspiros_instance",
+        "url": "https://evo.sg-labs.xyz/message/sendText/suspiros_instance",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -224,6 +225,7 @@
         "jsonBody": "={\n  \"number\": \"12102912723\",\n  \"text\": \"🌊 *Nueva Solicitud - Los Suspiros del Mar* 🌊\\n\\n👤 *Nombre:* {{ $('Webhook Trigger').item.json.body.name }}\\n📧 *Email:* {{ $('Webhook Trigger').item.json.body.email }}\\n📞 *Teléfono:* {{ $('Webhook Trigger').item.json.body.phone }}\\n📋 *Tipo:* {{ $('Webhook Trigger').item.json.body.form_type }}\\n💬 *Mensaje:* {{ $('Webhook Trigger').item.json.body.message || 'Sin mensaje' }}\"\n}",
         "options": {}
       },
+      "onError": "continueErrorOutput",
       "id": "77777777-7777-4777-8777-999999999999",
       "name": "Send WhatsApp Notification (Owner US)",
       "type": "n8n-nodes-base.httpRequest",

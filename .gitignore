@@ -26,3 +26,6 @@ logs/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Test artifacts
+tests/artifacts/
