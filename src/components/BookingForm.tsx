@@ -51,10 +51,15 @@ export default function BookingForm({
     const webhookUrl =
       import.meta.env.VITE_N8N_WEBHOOK_URL ||
       "https://n8n.sg-labs.xyz/webhook/submit"
-    const formType =
-      form.checkin || form.checkout || form.roomIndex !== ""
-        ? "booking"
-        : "contact"
+    const formattedBookingMessage = [
+      form.checkin ? `Check-in: ${form.checkin}` : null,
+      form.checkout ? `Check-out: ${form.checkout}` : null,
+      form.guests ? `Huéspedes: ${form.guests}` : null,
+      selectedRoom ? `Habitación: ${selectedRoom}` : null,
+      form.message ? `Mensaje: ${form.message}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n")
 
     try {
       const response = await fetch(webhookUrl, {
@@ -64,7 +69,7 @@ export default function BookingForm({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          form_type: formType,
+          form_type: "contact",
           name: form.name,
           email: form.email,
           phone: form.phone,
@@ -72,7 +77,7 @@ export default function BookingForm({
           checkout: form.checkout,
           guests: form.guests,
           room: selectedRoom,
-          message: form.message,
+          message: formattedBookingMessage || form.message,
         }),
       })
 
