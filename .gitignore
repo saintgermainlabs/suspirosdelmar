@@ -29,3 +29,6 @@ logs/
 
 # Test artifacts
 tests/artifacts/
+
+# Playwright MCP snapshot artifacts
+.playwright-mcp/
