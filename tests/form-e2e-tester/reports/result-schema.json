@@ -1,0 +1,24 @@
+{
+  "description": "Evidence-oriented result schema for the form E2E tester.",
+  "required": [
+    "test_id",
+    "form",
+    "started_at",
+    "assertions",
+    "overall"
+  ],
+  "assertion_states": [
+    "PASS",
+    "FAIL",
+    "UNKNOWN",
+    "BLOCKED"
+  ],
+  "required_assertions": [
+    "browser_submission",
+    "n8n_execution",
+    "postgresql",
+    "guest_email",
+    "staff_email",
+    "staff_whatsapp"
+  ]
+}

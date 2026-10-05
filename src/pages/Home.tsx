@@ -69,7 +69,13 @@ export default function Home() {
         targetPath = `/rooms/${targetRoom.slug}`
       }
     }
-    navigate(targetPath)
+    navigate(targetPath, {
+      state: {
+        checkin: form.checkin,
+        checkout: form.checkout,
+        guests: form.guests,
+      },
+    })
   }
 
   return (

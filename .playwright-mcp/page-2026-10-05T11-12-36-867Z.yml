@@ -1,0 +1,184 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#root"
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - link "Los Suspiros del Mar" [ref=e7] [cursor=pointer]:
+          - /url: /
+        - navigation [ref=e8]:
+          - link "Inicio" [ref=e9] [cursor=pointer]:
+            - /url: /
+          - link "Habitaciones y Apartamento" [ref=e10] [cursor=pointer]:
+            - /url: /rooms
+          - link "Experiencias" [ref=e11] [cursor=pointer]:
+            - /url: /experiences
+          - link "Galería" [ref=e12] [cursor=pointer]:
+            - /url: /gallery
+          - link "Nosotros" [ref=e13] [cursor=pointer]:
+            - /url: /about
+          - link "Contacto" [ref=e14] [cursor=pointer]:
+            - /url: /contact
+          - generic [ref=e15]:
+            - button "ES" [ref=e16]
+            - button "EN" [ref=e17]
+          - button "Reservar" [ref=e18]
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - img "Calm ocean water" [ref=e21]
+        - generic [ref=e22]:
+          - paragraph [ref=e23]: Contáctanos
+          - heading "Contacto y Ubicación" [level=1] [ref=e24]
+          - paragraph [ref=e25]: Respondemos rápido — generalmente en pocas horas.
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - paragraph [ref=e29]: Solicitud de reserva
+            - heading "Reserva tu estadía" [level=2] [ref=e30]
+            - generic [ref=e31]:
+              - generic [ref=e32]:
+                - generic [ref=e33]:
+                  - generic [ref=e34]: Nombre completo *
+                  - textbox "Nombre completo *" [ref=e35]:
+                    - /placeholder: Ana García
+                - generic [ref=e36]:
+                  - generic [ref=e37]: Correo electrónico *
+                  - textbox "Correo electrónico *" [ref=e38]:
+                    - /placeholder: ana@correo.com
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - generic [ref=e41]: Teléfono / WhatsApp
+                  - textbox "Teléfono / WhatsApp" [ref=e42]:
+                    - /placeholder: +51 999 000 000
+                - generic [ref=e43]:
+                  - generic [ref=e44]: Huéspedes
+                  - combobox "Huéspedes" [ref=e45]:
+                    - option "1 huésped"
+                    - option "2 huéspedes" [selected]
+                    - option "3 huéspedes"
+                    - option "4 huéspedes"
+                    - option "5 huéspedes"
+              - generic [ref=e46]:
+                - generic [ref=e47]:
+                  - generic [ref=e48]: Fecha de llegada *
+                  - textbox "Fecha de llegada *" [ref=e49] [cursor=pointer]
+                - generic [ref=e50]:
+                  - generic [ref=e51]: Fecha de salida *
+                  - textbox "Fecha de salida *" [ref=e52] [cursor=pointer]
+              - generic [ref=e53]:
+                - generic [ref=e54]: Habitación preferida
+                - combobox "Habitación preferida" [ref=e55]:
+                  - option "Sin preferencia" [selected]
+                  - option "Habitación Brisa del Mar — S/ 80"
+                  - option "Habitación Doble Atardecer — S/ 80"
+                  - option "Habitación Familiar Orilla — S/ 80"
+                  - option "Habitación Calma Oceánica — S/ 80"
+                  - option "Apartamento Superior — S/ 180"
+              - generic [ref=e56]:
+                - generic [ref=e57]: Mensaje o solicitudes especiales
+                - textbox "Mensaje o solicitudes especiales" [ref=e58]:
+                  - /placeholder: Aniversario, necesidades dietéticas, llegada temprana…
+              - button "Enviar solicitud de reserva" [ref=e59]
+              - paragraph [ref=e60]: Confirmaremos en pocas horas. No se requiere pago en esta etapa.
+          - generic [ref=e61]:
+            - generic [aria-hidden] [ref=e62]: 💬
+            - generic [ref=e63]:
+              - paragraph [ref=e64]: ¿Prefieres WhatsApp?
+              - link "Escríbenos por WhatsApp → (+51 976 666 412)" [ref=e65] [cursor=pointer]:
+                - /url: https://wa.me/51976666412?text=Hola%2C%20me%20gustar%C3%ADa%20reservar%20en%20Los%20Suspiros%20del%20Mar.
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - paragraph [ref=e68]: Encuéntranos
+            - iframe [ref=e70]
+          - generic [ref=e71]:
+            - generic [ref=e72]:
+              - paragraph [ref=e73]: Teléfono
+              - link "+51 976 666 412" [ref=e74] [cursor=pointer]:
+                - /url: tel:+51976666412
+            - generic [ref=e75]:
+              - paragraph [ref=e76]: Correo
+              - link "info@suspriodelmar.com" [ref=e77] [cursor=pointer]:
+                - /url: mailto:info@suspriodelmar.com
+            - generic [ref=e78]:
+              - paragraph [ref=e79]: Check-in
+              - paragraph [ref=e80]: Desde las 3:00 PM
+            - generic [ref=e81]:
+              - paragraph [ref=e82]: Check-out
+              - paragraph [ref=e83]: Hasta las 11:00 AM
+          - generic [ref=e84]:
+            - paragraph [ref=e85]: Preguntas frecuentes
+            - generic [ref=e86]:
+              - button "¿Hay estacionamiento disponible?" [ref=e88]:
+                - text: ¿Hay estacionamiento disponible?
+                - generic [aria-hidden] [ref=e89]: +
+              - button "¿Se permiten mascotas?" [ref=e91]:
+                - text: ¿Se permiten mascotas?
+                - generic [aria-hidden] [ref=e92]: +
+              - button "¿Es apto para familias?" [ref=e94]:
+                - text: ¿Es apto para familias?
+                - generic [aria-hidden] [ref=e95]: +
+              - button "¿Qué tan lejos está la playa?" [ref=e97]:
+                - text: ¿Qué tan lejos está la playa?
+                - generic [aria-hidden] [ref=e98]: +
+              - button "¿Qué métodos de pago aceptan?" [ref=e100]:
+                - text: ¿Qué métodos de pago aceptan?
+                - generic [aria-hidden] [ref=e101]: +
+              - button "¿Cuál es la política de cancelación?" [ref=e103]:
+                - text: ¿Cuál es la política de cancelación?
+                - generic [aria-hidden] [ref=e104]: +
+              - button "¿Hay Wi-Fi disponible?" [ref=e106]:
+                - text: ¿Hay Wi-Fi disponible?
+                - generic [aria-hidden] [ref=e107]: +
+              - button "¿Cuáles son los horarios de check-in y check-out?" [ref=e109]:
+                - text: ¿Cuáles son los horarios de check-in y check-out?
+                - generic [aria-hidden] [ref=e110]: +
+      - generic [ref=e111]:
+        - generic [ref=e112]:
+          - generic [ref=e113]:
+            - link "Los Suspiros del Mar" [ref=e114] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e115]: Un refugio costero donde el ritmo de las olas marca el paso de tu día. Descansa, reconéctate y deja que el mar haga el resto.
+            - paragraph [ref=e116]: "\"Descansa donde el mar suspira.\""
+          - generic [ref=e117]:
+            - heading "Navegar" [level=4] [ref=e118]
+            - list [ref=e119]:
+              - listitem [ref=e120]:
+                - link "Inicio" [ref=e121] [cursor=pointer]:
+                  - /url: /
+              - listitem [ref=e122]:
+                - link "Habitaciones y Apartamento" [ref=e123] [cursor=pointer]:
+                  - /url: /rooms
+              - listitem [ref=e124]:
+                - link "Experiencias" [ref=e125] [cursor=pointer]:
+                  - /url: /experiences
+              - listitem [ref=e126]:
+                - link "Galería" [ref=e127] [cursor=pointer]:
+                  - /url: /gallery
+              - listitem [ref=e128]:
+                - link "Nosotros" [ref=e129] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e130]:
+                - link "Contacto" [ref=e131] [cursor=pointer]:
+                  - /url: /contact
+          - generic [ref=e132]:
+            - heading "Contacto" [level=4] [ref=e133]
+            - generic [ref=e134]:
+              - paragraph [ref=e135]: Jr. Los Lirios, Mz. W, Lt. 8, Playa Arica, Lurín, Lima
+              - paragraph [ref=e136]:
+                - link "+51 976 666 412" [ref=e137] [cursor=pointer]:
+                  - /url: tel:+51976666412
+              - paragraph [ref=e138]:
+                - link "info@suspriodelmar.com" [ref=e139] [cursor=pointer]:
+                  - /url: mailto:info@suspriodelmar.com
+              - paragraph [ref=e140]: "Check-in: 3:00 PM · Check-out: 11:00 AM"
+        - generic [ref=e141]:
+          - paragraph [ref=e142]: © 2026 Los Suspiros del Mar. Todos los derechos reservados.
+          - generic [ref=e143]:
+            - link "Instagram" [ref=e144] [cursor=pointer]:
+              - /url: https://instagram.com/lossuspirosdelmar
+            - link "Facebook" [ref=e145] [cursor=pointer]:
+              - /url: https://facebook.com/lossuspirosdelmar
+            - link "TikTok" [ref=e146] [cursor=pointer]:
+              - /url: https://tiktok.com/@lossuspirosdelmar
+    - link "Contact via WhatsApp" [ref=e147] [cursor=pointer]:
+      - /url: https://wa.me/51976666412?text=Hola%2C%20me%20gustar%C3%ADa%20reservar%20en%20Los%20Suspiros%20del%20Mar.

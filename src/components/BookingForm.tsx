@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useLocation } from "react-router-dom"
 import { useLang } from "../LanguageContext"
 import { waLink } from "../site"
 
@@ -24,14 +25,20 @@ export default function BookingForm({
   const { tr } = useLang()
   const c = tr.contact
   const f = c.fields
+  // Dates/guests chosen in the Home availability widget arrive via router state
+  const prefill = (useLocation().state ?? {}) as {
+    checkin?: string
+    checkout?: string
+    guests?: string
+  }
 
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
-    checkin: initialCheckin,
-    checkout: initialCheckout,
-    guests: initialGuests,
+    checkin: prefill.checkin || initialCheckin,
+    checkout: prefill.checkout || initialCheckout,
+    guests: prefill.guests || initialGuests,
     roomIndex: defaultRoomIndex,
     message: "",
   })
@@ -81,15 +88,17 @@ export default function BookingForm({
         }),
       })
 
-      if (response.ok || response.status === 200 || response.status === 500) {
+      // n8n returns 200 with an empty body when the workflow stops before
+      // "Respond to Webhook", so only trust an explicit success flag.
+      const result = await response.json().catch(() => null)
+      if (response.ok && result?.success === true) {
         setSent(true)
       } else {
         setError("Ocurrió un inconveniente. Puedes contactarnos directamente por WhatsApp.")
       }
     } catch (err) {
       console.error("Submission fetch error:", err)
-      // Even if network has a glitch, display confirmation with direct WhatsApp button
-      setSent(true)
+      setError("Ocurrió un inconveniente. Puedes contactarnos directamente por WhatsApp.")
     } finally {
       setIsSubmitting(false)
     }

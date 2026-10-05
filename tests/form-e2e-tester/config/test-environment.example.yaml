@@ -1,0 +1,47 @@
+# Copy this file to a private/local configuration file.
+# NEVER commit real credentials or secrets.
+
+environment: production
+
+site:
+  base_url: "https://YOUR-SITE.example"
+  booking_path: "/booking"
+  contact_path: "/contact"
+
+timeouts:
+  complete_test_seconds: 300
+  initial_poll_seconds: 2
+  maximum_poll_seconds: 15
+
+n8n:
+  base_url: "https://YOUR-N8N.example"
+  workflow_ids:
+    booking: "REPLACE_ME"
+    contact: "REPLACE_ME"
+
+postgresql:
+  # Prefer environment variables or a secret manager rather than storing credentials here.
+  host: "REPLACE_ME"
+  port: 5432
+  database: "REPLACE_ME"
+  schema: "public"
+  booking_table: "REPLACE_ME"
+  contact_table: "REPLACE_ME"
+
+email:
+  staff_address: "REPLACE_ME"
+  test_domain: "REPLACE_ME"
+
+whatsapp:
+  staff_number: "REPLACE_ME"
+  evolution_api_base_url: "https://YOUR-EVOLUTION.example"
+
+testing:
+  # Keep test submissions synthetic and clearly identifiable.
+  test_prefix: "E2E"
+
+  # If true, cleanup is allowed only for records created by this test suite.
+  cleanup_test_records: false
+
+  # Never enable destructive cleanup against unverified records.
+  allow_destructive_cleanup: false
