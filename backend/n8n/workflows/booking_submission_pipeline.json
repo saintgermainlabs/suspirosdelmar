@@ -81,69 +81,6 @@
     },
     {
       "parameters": {
-        "operation": "executeQuery",
-        "query": "INSERT INTO submissions (form_type, name, email, phone, status, payload)\nVALUES (\n  '{{ $('Webhook Trigger').item.json.body.form_type }}',\n  '{{ $('Webhook Trigger').item.json.body.name }}',\n  '{{ $('Webhook Trigger').item.json.body.email }}',\n  '{{ $('Webhook Trigger').item.json.body.phone }}',\n  'pending',\n  '{{ JSON.stringify($('Webhook Trigger').item.json.body) }}'::jsonb\n)\nRETURNING id AS submission_id, form_type, name, email, phone;"
-      },
-      "onError": "continueErrorOutput",
-      "id": "33333333-3333-4333-8333-333333333333",
-      "name": "Insert Submission (Booking)",
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.4,
-      "position": [
-        700,
-        200
-      ],
-      "credentials": {
-        "postgres": {
-          "id": "suspiros_postgres_cred",
-          "name": "PostgreSQL suspiros_db"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "INSERT INTO bookings (submission_id, guest_name, guest_email, guest_phone, checkin_date, checkout_date, guests_count, room_name, special_requests, status)\nVALUES (\n  NULLIF('{{ $('Insert Submission (Booking)').item?.json?.submission_id || \"\" }}', '')::uuid,\n  '{{ $('Webhook Trigger').item.json.body.name }}',\n  '{{ $('Webhook Trigger').item.json.body.email }}',\n  '{{ $('Webhook Trigger').item.json.body.phone }}',\n  '{{ $('Webhook Trigger').item.json.body.checkin }}',\n  '{{ $('Webhook Trigger').item.json.body.checkout }}',\n  {{ $('Webhook Trigger').item.json.body.guests || 1 }},\n  '{{ $('Webhook Trigger').item.json.body.room }}',\n  '{{ $('Webhook Trigger').item.json.body.message }}',\n  'pending'\n)\nRETURNING id AS booking_id, submission_id;"
-      },
-      "onError": "continueErrorOutput",
-      "id": "44444444-4444-4444-8444-444444444444",
-      "name": "Insert Booking",
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.4,
-      "position": [
-        920,
-        200
-      ],
-      "credentials": {
-        "postgres": {
-          "id": "suspiros_postgres_cred",
-          "name": "PostgreSQL suspiros_db"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "INSERT INTO submissions (form_type, name, email, phone, status, payload)\nVALUES (\n  '{{ $('Webhook Trigger').item.json.body.form_type }}',\n  '{{ $('Webhook Trigger').item.json.body.name }}',\n  '{{ $('Webhook Trigger').item.json.body.email }}',\n  '{{ $('Webhook Trigger').item.json.body.phone }}',\n  'pending',\n  '{{ JSON.stringify($('Webhook Trigger').item.json.body) }}'::jsonb\n)\nRETURNING id AS submission_id, form_type, name, email, phone;"
-      },
-      "onError": "continueErrorOutput",
-      "id": "55555555-5555-4555-8555-555555555555",
-      "name": "Insert Submission (Contact)",
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.4,
-      "position": [
-        700,
-        420
-      ],
-      "credentials": {
-        "postgres": {
-          "id": "suspiros_postgres_cred",
-          "name": "PostgreSQL suspiros_db"
-        }
-      }
-    },
-    {
-      "parameters": {
         "method": "POST",
         "url": "https://api.resend.com/emails",
         "sendHeaders": true,
@@ -161,7 +98,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Los Suspiros del Mar <onboarding@resend.dev>\",\n  \"to\": [\"{{ $('Webhook Trigger').item.json.body.email }}\"],\n  \"subject\": \"Confirmación de Solicitud - Los Suspiros del Mar\",\n  \"html\": \"<h2>¡Gracias por contactarnos, {{ $('Webhook Trigger').item.json.body.name }}!</h2><p>Hemos recibido tu solicitud. Nos pondremos en contacto contigo pronto.</p>\"\n}",
+        "jsonBody": "={\n  \"from\": \"Los Suspiros del Mar <onboarding@resend.dev>\",\n  \"to\": [\"{{ $('Webhook Trigger').item.json.body.email }}\"],\n  \"subject\": \"Confirmación de Solicitud - Los Suspiros del Mar\",\n  \"html\": \"<h2>¡Gracias por contactarnos, {{ $('Webhook Trigger').item.json.body.name }}!</h2><p>Hemos recibido tu solicitud de reserva en Los Suspiros del Mar. Nos pondremos en contacto contigo pronto.</p>\"\n}",
         "options": {}
       },
       "onError": "continueErrorOutput",
@@ -170,7 +107,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1140,
+        750,
         300
       ]
     },
@@ -193,7 +130,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"number\": \"51953677228\",\n  \"text\": \"🌊 *Nueva Solicitud - Los Suspiros del Mar* 🌊\\n\\n👤 *Nombre:* {{ $('Webhook Trigger').item.json.body.name }}\\n📧 *Email:* {{ $('Webhook Trigger').item.json.body.email }}\\n📞 *Teléfono:* {{ $('Webhook Trigger').item.json.body.phone }}\\n📋 *Tipo:* {{ $('Webhook Trigger').item.json.body.form_type }}\\n💬 *Mensaje:* {{ $('Webhook Trigger').item.json.body.message || 'Sin mensaje' }}\"\n}",
+        "jsonBody": "={\n  \"number\": \"51953677228\",\n  \"text\": \"🌊 *Nueva Solicitud - Los Suspiros del Mar* 🌊\\n\\n👤 *Nombre:* {{ $('Webhook Trigger').item.json.body.name }}\\n📧 *Email:* {{ $('Webhook Trigger').item.json.body.email }}\\n📞 *Teléfono:* {{ $('Webhook Trigger').item.json.body.phone }}\\n💬 *Detalles:* {{ $('Webhook Trigger').item.json.body.message || 'Sin mensaje' }}\"\n}",
         "options": {}
       },
       "onError": "continueErrorOutput",
@@ -202,8 +139,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1360,
-        200
+        1000,
+        150
       ]
     },
     {
@@ -225,7 +162,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"number\": \"12102912723\",\n  \"text\": \"🌊 *Nueva Solicitud - Los Suspiros del Mar* 🌊\\n\\n👤 *Nombre:* {{ $('Webhook Trigger').item.json.body.name }}\\n📧 *Email:* {{ $('Webhook Trigger').item.json.body.email }}\\n📞 *Teléfono:* {{ $('Webhook Trigger').item.json.body.phone }}\\n📋 *Tipo:* {{ $('Webhook Trigger').item.json.body.form_type }}\\n💬 *Mensaje:* {{ $('Webhook Trigger').item.json.body.message || 'Sin mensaje' }}\"\n}",
+        "jsonBody": "={\n  \"number\": \"12102912723\",\n  \"text\": \"🌊 *Nueva Solicitud - Los Suspiros del Mar* 🌊\\n\\n👤 *Nombre:* {{ $('Webhook Trigger').item.json.body.name }}\\n📧 *Email:* {{ $('Webhook Trigger').item.json.body.email }}\\n📞 *Teléfono:* {{ $('Webhook Trigger').item.json.body.phone }}\\n💬 *Detalles:* {{ $('Webhook Trigger').item.json.body.message || 'Sin mensaje' }}\"\n}",
         "options": {}
       },
       "onError": "continueErrorOutput",
@@ -234,8 +171,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1360,
-        400
+        1000,
+        300
       ]
     },
     {
@@ -257,7 +194,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"number\": \"{{ $('Webhook Trigger').item.json.body.phone ? $('Webhook Trigger').item.json.body.phone.replace(/[^0-9]/g, '') : '51918474414' }}\",\n  \"text\": \"🌊 *Los Suspiros del Mar* 🌊\\n\\n¡Hola {{ $('Webhook Trigger').item.json.body.name }}! Hemos recibido tu solicitud de {{ $('Webhook Trigger').item.json.body.form_type }}. Nos pondremos en contacto contigo a la brevedad.\"\n}",
+        "jsonBody": "={\n  \"number\": \"{{ $('Webhook Trigger').item.json.body.phone ? $('Webhook Trigger').item.json.body.phone.replace(/[^0-9]/g, '') : '51918474414' }}\",\n  \"text\": \"🌊 *Los Suspiros del Mar* 🌊\\n\\n¡Hola {{ $('Webhook Trigger').item.json.body.name }}! Hemos recibido tu solicitud de reserva. Nos pondremos en contacto contigo a la brevedad.\"\n}",
         "options": {}
       },
       "onError": "continueErrorOutput",
@@ -266,14 +203,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1360,
-        600
+        1000,
+        450
       ]
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={\n  \"success\": true,\n  \"submission_id\": \"{{ $('Insert Booking').item?.json?.submission_id || $('Insert Submission (Contact)').item?.json?.submission_id || $('Insert Submission (Booking)').item?.json?.submission_id || '' }}\",\n  \"message\": \"Submission processed successfully\"\n}",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"Submission processed successfully\"\n}",
         "options": {
           "responseCode": 200
         }
@@ -283,7 +220,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        1580,
+        1250,
         300
       ]
     }
@@ -304,44 +241,11 @@
       "main": [
         [
           {
-            "node": "Insert Submission (Booking)",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Insert Submission (Contact)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Insert Submission (Booking)": {
-      "main": [
-        [
-          {
-            "node": "Insert Booking",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Insert Booking": {
-      "main": [
-        [
-          {
             "node": "Send Resend Email",
             "type": "main",
             "index": 0
           }
-        ]
-      ]
-    },
-    "Insert Submission (Contact)": {
-      "main": [
+        ],
         [
           {
             "node": "Send Resend Email",
