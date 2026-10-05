@@ -126,7 +126,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ from: \"Los Suspiros del Mar <onboarding@resend.dev>\", to: [$('Webhook Trigger').item.json.body.email], subject: \"Confirmación de Solicitud - Los Suspiros del Mar\", html: \"<h2>¡Gracias por contactarnos, \" + ($('Webhook Trigger').item.json.body.name ?? \"\") + \"!</h2><p>Hemos recibido tu solicitud. Nos pondremos en contacto contigo pronto.</p>\" }) }}",
+        "jsonBody": "={{ JSON.stringify({ from: \"Los Suspiros del Mar <reservas@suspirodelmar.com>\", to: [$('Webhook Trigger').item.json.body.email], subject: \"Confirmación de Solicitud - Los Suspiros del Mar\", html: \"<h2>¡Gracias por contactarnos, \" + ($('Webhook Trigger').item.json.body.name ?? \"\") + \"!</h2><p>Hemos recibido tu solicitud. Nos pondremos en contacto contigo pronto.</p>\" }) }}",
         "options": {}
       },
       "id": "e4f2ac80-e222-4e0f-91d7-c008f5c9be7b",
