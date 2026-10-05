@@ -84,6 +84,7 @@
         "operation": "executeQuery",
         "query": "INSERT INTO submissions (form_type, name, email, phone, status, payload)\nVALUES (\n  '{{ $('Webhook Trigger').item.json.body.form_type }}',\n  '{{ $('Webhook Trigger').item.json.body.name }}',\n  '{{ $('Webhook Trigger').item.json.body.email }}',\n  '{{ $('Webhook Trigger').item.json.body.phone }}',\n  'pending',\n  '{{ JSON.stringify($('Webhook Trigger').item.json.body) }}'::jsonb\n)\nRETURNING id AS submission_id, form_type, name, email, phone;"
       },
+      "onError": "continueErrorOutput",
       "id": "33333333-3333-4333-8333-333333333333",
       "name": "Insert Submission (Booking)",
       "type": "n8n-nodes-base.postgres",
@@ -102,8 +103,9 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "INSERT INTO bookings (submission_id, guest_name, guest_email, guest_phone, checkin_date, checkout_date, guests_count, room_name, special_requests, status)\nVALUES (\n  '{{ $('Insert Submission (Booking)').item.json.submission_id }}',\n  '{{ $('Webhook Trigger').item.json.body.name }}',\n  '{{ $('Webhook Trigger').item.json.body.email }}',\n  '{{ $('Webhook Trigger').item.json.body.phone }}',\n  '{{ $('Webhook Trigger').item.json.body.checkin }}',\n  '{{ $('Webhook Trigger').item.json.body.checkout }}',\n  {{ $('Webhook Trigger').item.json.body.guests || 1 }},\n  '{{ $('Webhook Trigger').item.json.body.room }}',\n  '{{ $('Webhook Trigger').item.json.body.message }}',\n  'pending'\n)\nRETURNING id AS booking_id, submission_id;"
+        "query": "INSERT INTO bookings (submission_id, guest_name, guest_email, guest_phone, checkin_date, checkout_date, guests_count, room_name, special_requests, status)\nVALUES (\n  NULLIF('{{ $('Insert Submission (Booking)').item?.json?.submission_id || \"\" }}', '')::uuid,\n  '{{ $('Webhook Trigger').item.json.body.name }}',\n  '{{ $('Webhook Trigger').item.json.body.email }}',\n  '{{ $('Webhook Trigger').item.json.body.phone }}',\n  '{{ $('Webhook Trigger').item.json.body.checkin }}',\n  '{{ $('Webhook Trigger').item.json.body.checkout }}',\n  {{ $('Webhook Trigger').item.json.body.guests || 1 }},\n  '{{ $('Webhook Trigger').item.json.body.room }}',\n  '{{ $('Webhook Trigger').item.json.body.message }}',\n  'pending'\n)\nRETURNING id AS booking_id, submission_id;"
       },
+      "onError": "continueErrorOutput",
       "id": "44444444-4444-4444-8444-444444444444",
       "name": "Insert Booking",
       "type": "n8n-nodes-base.postgres",
@@ -124,6 +126,7 @@
         "operation": "executeQuery",
         "query": "INSERT INTO submissions (form_type, name, email, phone, status, payload)\nVALUES (\n  '{{ $('Webhook Trigger').item.json.body.form_type }}',\n  '{{ $('Webhook Trigger').item.json.body.name }}',\n  '{{ $('Webhook Trigger').item.json.body.email }}',\n  '{{ $('Webhook Trigger').item.json.body.phone }}',\n  'pending',\n  '{{ JSON.stringify($('Webhook Trigger').item.json.body) }}'::jsonb\n)\nRETURNING id AS submission_id, form_type, name, email, phone;"
       },
+      "onError": "continueErrorOutput",
       "id": "55555555-5555-4555-8555-555555555555",
       "name": "Insert Submission (Contact)",
       "type": "n8n-nodes-base.postgres",
@@ -237,8 +240,40 @@
     },
     {
       "parameters": {
+        "method": "POST",
+        "url": "https://evo.sg-labs.xyz/message/sendText/suspiros_instance",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "53A9B246CB97-41DB-9A25-FBF2A31508AE"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('Webhook Trigger').item.json.body.phone ? $('Webhook Trigger').item.json.body.phone.replace(/[^0-9]/g, '') : '51918474414' }}\",\n  \"text\": \"🌊 *Los Suspiros del Mar* 🌊\\n\\n¡Hola {{ $('Webhook Trigger').item.json.body.name }}! Hemos recibido tu solicitud de {{ $('Webhook Trigger').item.json.body.form_type }}. Nos pondremos en contacto contigo a la brevedad.\"\n}",
+        "options": {}
+      },
+      "onError": "continueErrorOutput",
+      "id": "77777777-7777-4777-8777-888888888888",
+      "name": "Send WhatsApp Notification (Guest)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        600
+      ]
+    },
+    {
+      "parameters": {
         "respondWith": "json",
-        "responseBody": "={\n  \"success\": true,\n  \"submission_id\": \"{{ $('Webhook Trigger').item.json.body.form_type === 'booking' ? $('Insert Booking').item.json.submission_id : $('Insert Submission (Contact)').item.json.submission_id }}\",\n  \"message\": \"Submission processed successfully\"\n}",
+        "responseBody": "={\n  \"success\": true,\n  \"submission_id\": \"{{ $('Insert Booking').item?.json?.submission_id || $('Insert Submission (Contact)').item?.json?.submission_id || $('Insert Submission (Booking)').item?.json?.submission_id || '' }}\",\n  \"message\": \"Submission processed successfully\"\n}",
         "options": {
           "responseCode": 200
         }
@@ -328,6 +363,11 @@
             "node": "Send WhatsApp Notification (Owner US)",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Send WhatsApp Notification (Guest)",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -344,6 +384,17 @@
       ]
     },
     "Send WhatsApp Notification (Owner US)": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp Notification (Guest)": {
       "main": [
         [
           {
