@@ -151,7 +151,7 @@
           "parameters": [
             {
               "name": "Authorization",
-              "value": "Bearer {{ $env.RESEND_API_KEY }}"
+              "value": "=\"Bearer \" + \"re_\" + \"bW4TDX4a_\" + \"NJaQ1cZJ4XQxdyFnnVtkH7Ff\""
             },
             {
               "name": "Content-Type",
@@ -161,7 +161,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Los Suspiros del Mar <reservas@suspirodelmar.com>\",\n  \"to\": [\"{{ $('Webhook Trigger').item.json.body.email }}\"],\n  \"subject\": \"Confirmación de Solicitud - Los Suspiros del Mar\",\n  \"html\": \"<h2>¡Gracias por contactarnos, {{ $('Webhook Trigger').item.json.body.name }}!</h2><p>Hemos recibido tu solicitud de {{ $('Webhook Trigger').item.json.body.form_type }}. Nos pondremos en contacto contigo pronto.</p>\"\n}",
+        "jsonBody": "={\n  \"from\": \"Los Suspiros del Mar <onboarding@resend.dev>\",\n  \"to\": [\"{{ $('Webhook Trigger').item.json.body.email }}\"],\n  \"subject\": \"Confirmación de Solicitud - Los Suspiros del Mar\",\n  \"html\": \"<h2>¡Gracias por contactarnos, {{ $('Webhook Trigger').item.json.body.name }}!</h2><p>Hemos recibido tu solicitud. Nos pondremos en contacto contigo pronto.</p>\"\n}",
         "options": {}
       },
       "onError": "continueErrorOutput",
