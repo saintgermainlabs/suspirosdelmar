@@ -5,9 +5,9 @@
 
 export const site = {
   name: "Los Suspiros del Mar",
-  phoneDisplay: "+51 976 666 412",
-  phoneHref: "tel:+51976666412",
-  whatsappNumber: "51976666412", // country code + number, digits only
+  phoneDisplay: "+1 (210) 365-9988",
+  phoneHref: "tel:+12103659988",
+  whatsappNumber: "12103659988", // country code + number, digits only
   email: "info@suspriodelmar.com",
   address: "Jr. Los Lirios, Mz. W, Lt. 8, Playa Arica, Lurín, Lima",
   checkin: "3:00 PM",
