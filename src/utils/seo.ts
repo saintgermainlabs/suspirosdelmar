@@ -7,6 +7,7 @@ export interface SEOConfig {
   url?: string
   image?: string
   lang?: Lang
+  noindex?: boolean
 }
 
 export function updateSEO({
@@ -15,7 +16,20 @@ export function updateSEO({
   url,
   image,
   lang = "es",
+  noindex = false,
 }: SEOConfig) {
+  const canonicalUrl = new URL(url || window.location.href)
+  canonicalUrl.search = ""
+  canonicalUrl.hash = ""
+  const socialImage = new URL(image || "/images/Common_Room_View1.jpg", canonicalUrl.origin).href
+  let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+  if (!canonical) {
+    canonical = document.createElement("link")
+    canonical.rel = "canonical"
+    document.head.appendChild(canonical)
+  }
+  canonical.href = canonicalUrl.href
+
   // 1. Update Document Title
   document.title = `${title} | ${site.name}`
 
@@ -37,20 +51,23 @@ export function updateSEO({
 
   // Standard Meta Tags
   setMeta("name", "description", description)
+  setMeta("name", "robots", noindex ? "noindex, follow" : "index, follow")
 
   // OpenGraph Meta Tags
   setMeta("property", "og:title", `${title} | ${site.name}`)
   setMeta("property", "og:description", description)
   setMeta("property", "og:type", "website")
   setMeta("property", "og:site_name", site.name)
-  if (url) setMeta("property", "og:url", url)
-  if (image) setMeta("property", "og:image", image)
+  setMeta("property", "og:locale", lang === "es" ? "es_PE" : "en_US")
+  setMeta("property", "og:url", canonicalUrl.href)
+  setMeta("property", "og:image", socialImage)
+  setMeta("property", "og:image:alt", site.name)
 
   // Twitter Cards
   setMeta("name", "twitter:card", "summary_large_image")
   setMeta("name", "twitter:title", `${title} | ${site.name}`)
   setMeta("name", "twitter:description", description)
-  if (image) setMeta("name", "twitter:image", image)
+  setMeta("name", "twitter:image", socialImage)
 
   // 4. Inject Schema.org Hotel JSON-LD Structured Data
   injectHotelSchema()

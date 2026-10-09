@@ -1,3 +1,4 @@
+import SiteImage from "../components/SiteImage"
 import { Link, useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
 import SEO from "../components/SEO"
@@ -123,7 +124,7 @@ export default function Rooms() {
 
       {/* Hero */}
       <section className="relative h-72 md:h-96 bg-[#1b4d6e] flex items-center justify-center overflow-hidden">
-        <img
+        <SiteImage loading="eager" fetchPriority="high" sizes="100vw"
           src="https://images.unsplash.com/photo-1783255620846-6b98d1fe2eb0?w=1600&h=600&fit=crop&auto=format"
           alt="Waves crashing against a cliffside house at sunset"
           className="absolute inset-0 w-full h-full object-cover opacity-50"
@@ -159,7 +160,7 @@ export default function Rooms() {
               to={`/rooms/${room.slug}`}
               className="relative overflow-hidden rounded-lg bg-[#d6cdb8] h-72 md:h-80 block group shadow-sm"
             >
-              <img
+              <SiteImage
                 src={room.images.hero}
                 alt={room.title[lang]}
                 loading="lazy"
@@ -229,7 +230,7 @@ export default function Rooms() {
             to="/apartment"
             className="overflow-hidden h-56 md:h-auto bg-[#d6cdb8] block group"
           >
-            <img
+            <SiteImage
               src="/images/Appartment_Bedroom_View1.jpg"
               alt={apartment.title[lang]}
               loading="lazy"
@@ -282,7 +283,7 @@ export default function Rooms() {
                 className="overflow-hidden rounded-lg bg-[#d6cdb8]"
               >
                 <div className="aspect-[4/3] overflow-hidden">
-                  <img
+                  <SiteImage
                     src={photo.src}
                     alt={photo.alt[lang]}
                     loading="lazy"

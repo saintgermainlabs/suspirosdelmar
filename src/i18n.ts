@@ -365,6 +365,7 @@ export const t = {
 
     // Contact
     contact: {
+      submissionError: "Something went wrong. You can contact us directly on WhatsApp.",
       tag: "Get in touch",
       heroTitle: "Contact & Location",
       heroSub: "We respond quickly — usually within a few hours.",
@@ -804,6 +805,7 @@ export const t = {
     },
 
     contact: {
+      submissionError: "Ocurrió un inconveniente. Puedes contactarnos directamente por WhatsApp.",
       tag: "Contáctanos",
       heroTitle: "Contacto y Ubicación",
       heroSub: "Respondemos rápido — generalmente en pocas horas.",

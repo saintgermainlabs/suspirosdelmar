@@ -1,3 +1,4 @@
+import SiteImage from "../components/SiteImage"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import Footer from "../components/Footer"
@@ -9,7 +10,7 @@ import { roomsData } from "../data/roomsData"
 
 interface ApartmentPhoto {
   src: string
-  alt: { en: string es: string }
+  alt: { en: string; es: string }
 }
 
 const bedroomPhotos: ApartmentPhoto[] = [
@@ -96,7 +97,7 @@ export default function Apartment() {
 
       {/* Hero */}
       <section className="relative h-72 md:h-96 bg-[#1b4d6e] flex items-center justify-center overflow-hidden">
-        <img
+        <SiteImage loading="eager" fetchPriority="high" sizes="100vw"
           src="/images/Appartment_Bedroom_View1.jpg"
           alt="Master bedroom of the upstairs apartment with sea view"
           className="absolute inset-0 w-full h-full object-cover opacity-50"
@@ -118,7 +119,7 @@ export default function Apartment() {
         {/* Left: Info & Specs */}
         <div className="lg:col-span-7 space-y-8">
           <div className="relative overflow-hidden rounded-lg bg-[#d6cdb8] h-80 md:h-96 shadow-md">
-            <img
+            <SiteImage
               src="/images/Appartment_Bedroom_View1.jpg"
               alt={
                 lang === "en"
@@ -215,7 +216,7 @@ export default function Apartment() {
                 className="group cursor-pointer overflow-hidden rounded-lg bg-[#d6cdb8] shadow-sm"
               >
                 <div className="aspect-[4/3] overflow-hidden">
-                  <img
+                  <SiteImage
                     src={photo.src}
                     alt={photo.alt[lang]}
                     loading="lazy"
@@ -243,7 +244,7 @@ export default function Apartment() {
                 className="group cursor-pointer overflow-hidden rounded-lg bg-[#d6cdb8] shadow-sm"
               >
                 <div className="aspect-[4/3] overflow-hidden">
-                  <img
+                  <SiteImage
                     src={photo.src}
                     alt={photo.alt[lang]}
                     loading="lazy"

@@ -7,7 +7,7 @@ export default function SEO(props: Omit<SEOConfig, "lang">) {
 
   useEffect(() => {
     updateSEO({ ...props, lang })
-  }, [props.title, props.description, props.url, props.image, lang])
+  }, [props.title, props.description, props.url, props.image, props.noindex, lang])
 
   return null
 }

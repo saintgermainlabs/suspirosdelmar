@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useLang } from "../LanguageContext"
 import { waLink } from "../site"
+import { localDateString, nextDate } from "../utils/dates"
 
 export interface BookingFormProps {
   defaultRoomIndex?: string
@@ -48,6 +49,7 @@ export default function BookingForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (isSubmitting) return
     setIsSubmitting(true)
     setError(null)
 
@@ -94,11 +96,11 @@ export default function BookingForm({
       if (response.ok && result?.success === true) {
         setSent(true)
       } else {
-        setError("Ocurrió un inconveniente. Puedes contactarnos directamente por WhatsApp.")
+        setError(tr.contact.submissionError)
       }
     } catch (err) {
       console.error("Submission fetch error:", err)
-      setError("Ocurrió un inconveniente. Puedes contactarnos directamente por WhatsApp.")
+      setError(tr.contact.submissionError)
     } finally {
       setIsSubmitting(false)
     }
@@ -117,10 +119,11 @@ export default function BookingForm({
     .filter(Boolean)
     .join("\n")
 
-  const todayStr = new Date().toISOString().split("T")[0]
+  const todayStr = localDateString()
   const maxDate = new Date()
   maxDate.setFullYear(maxDate.getFullYear() + 3)
-  const maxDateStr = maxDate.toISOString().split("T")[0]
+  const maxDateStr = localDateString(maxDate)
+  const checkoutMin = nextDate(form.checkin || todayStr)
 
   const inputClass =
     "w-full border border-[#d6cdb8] rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#4a8fa3] bg-white"
@@ -135,21 +138,6 @@ export default function BookingForm({
       }
     } catch (_) {
       // Fallback for browsers that block async showPicker calls
-    }
-  }
-
-  const handleDateInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Tab") return
-    e.preventDefault()
-    try {
-      if (
-        "showPicker" in e.currentTarget &&
-        typeof e.currentTarget.showPicker === "function"
-      ) {
-        e.currentTarget.showPicker()
-      }
-    } catch (_) {
-      // Fallback
     }
   }
 
@@ -291,8 +279,7 @@ export default function BookingForm({
                 max={maxDateStr}
                 value={form.checkin}
                 onClick={handleDateInputClick}
-                onKeyDown={handleDateInputKeyDown}
-                onChange={(e) => setForm({ ...form, checkin: e.target.value })}
+                onChange={(e) => setForm({ ...form, checkin: e.target.value, checkout: form.checkout > e.target.value ? form.checkout : "" })}
                 className={`${inputClass} cursor-pointer`}
               />
             </div>
@@ -309,10 +296,9 @@ export default function BookingForm({
                 required
                 type="date"
                 value={form.checkout}
-                min={form.checkin || todayStr}
+                min={checkoutMin}
                 max={maxDateStr}
                 onClick={handleDateInputClick}
-                onKeyDown={handleDateInputKeyDown}
                 onChange={(e) => setForm({ ...form, checkout: e.target.value })}
                 className={`${inputClass} cursor-pointer`}
               />
@@ -366,7 +352,7 @@ export default function BookingForm({
           </div>
 
           {error && (
-            <div className="text-red-600 bg-red-50 border border-red-200 rounded px-4 py-3 text-sm text-center">
+            <div role="alert" className="text-red-600 bg-red-50 border border-red-200 rounded px-4 py-3 text-sm text-center">
               {error}
             </div>
           )}

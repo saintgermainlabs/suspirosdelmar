@@ -1,3 +1,4 @@
+import SiteImage from "../components/SiteImage"
 import { useState } from "react"
 import Footer from "../components/Footer"
 import SEO from "../components/SEO"
@@ -20,10 +21,9 @@ export default function Contact() {
 
       {/* Hero */}
       <section className="relative h-64 bg-[#1b4d6e] flex items-center justify-center overflow-hidden">
-        <img
+        <SiteImage loading="eager" fetchPriority="high" sizes="100vw"
           src="https://images.unsplash.com/photo-1577978080965-0c295bd5953f?w=1600&h=400&fit=crop&auto=format"
           alt="Calm ocean water"
-          loading="eager"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />

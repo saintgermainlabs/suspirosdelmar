@@ -1,3 +1,4 @@
+import SiteImage from "../components/SiteImage"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
@@ -6,6 +7,7 @@ import { useLang } from "../LanguageContext"
 import heroImg from "../imports/dlirr.jpg"
 import { previewPhotos } from "../galleryData"
 import { roomsData } from "../data/roomsData"
+import { localDateString, nextDate } from "../utils/dates"
 
 export default function Home() {
   const { tr, lang } = useLang()
@@ -26,10 +28,11 @@ export default function Home() {
     { icon: "🌿", title: h.highlightTitle4, desc: h.highlightDesc4 },
   ]
 
-  const todayStr = new Date().toISOString().split("T")[0]
+  const todayStr = localDateString()
   const maxDate = new Date()
   maxDate.setFullYear(maxDate.getFullYear() + 3)
-  const maxDateStr = maxDate.toISOString().split("T")[0]
+  const maxDateStr = localDateString(maxDate)
+  const checkoutMin = nextDate(form.checkin || todayStr)
 
   const handleDateInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
     try {
@@ -44,22 +47,8 @@ export default function Home() {
     }
   }
 
-  const handleDateInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Tab") return
-    e.preventDefault()
-    try {
-      if (
-        "showPicker" in e.currentTarget &&
-        typeof e.currentTarget.showPicker === "function"
-      ) {
-        e.currentTarget.showPicker()
-      }
-    } catch (_) {
-      // Fallback
-    }
-  }
-
-  const handleBookSubmit = () => {
+  const handleBookSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     let targetPath = "/contact"
     if (form.roomIndex === "4") {
       targetPath = "/apartment"
@@ -81,14 +70,14 @@ export default function Home() {
   return (
     <main className="pt-16 min-h-screen bg-[#f7f4ef]">
       <SEO
-        title="Rest Where the Sea Sighs"
-        description={h.heroDesc}
+        title={lang === "es" ? "Hotel en Playa Arica, Lurín, Lima" : "Beach Hotel in Playa Arica, Lurín, Lima"}
+        description={`${h.heroDesc} ${h.location}`}
         url={window.location.origin}
       />
 
       {/* Hero */}
       <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-[#1b4d6e]">
-        <img
+        <SiteImage loading="eager" fetchPriority="high" sizes="100vw"
           src={heroImg}
           alt="Sunset at Los Suspiros del Mar"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-70"
@@ -132,7 +121,7 @@ export default function Home() {
         className="max-w-5xl mx-auto px-6 -mt-12 relative z-20"
         aria-label={h.bookTitle}
       >
-        <div className="bg-white shadow-xl rounded-lg p-6 border border-[#d6cdb8]">
+        <form onSubmit={handleBookSubmit} className="bg-white shadow-xl rounded-lg p-6 border border-[#d6cdb8]">
           <p className="text-xs uppercase tracking-widest text-[#6b6355] mb-4 font-medium">
             {h.bookTitle}
           </p>
@@ -149,10 +138,10 @@ export default function Home() {
                 type="date"
                 min={todayStr}
                 max={maxDateStr}
+                required
                 value={form.checkin}
                 onClick={handleDateInputClick}
-                onKeyDown={handleDateInputKeyDown}
-                onChange={(e) => setForm({ ...form, checkin: e.target.value })}
+                onChange={(e) => setForm({ ...form, checkin: e.target.value, checkout: form.checkout > e.target.value ? form.checkout : "" })}
                 className="w-full border border-[#d6cdb8] rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#4a8fa3] cursor-pointer"
               />
             </div>
@@ -166,11 +155,11 @@ export default function Home() {
               <input
                 id="home-checkout"
                 type="date"
+                required
                 value={form.checkout}
-                min={form.checkin || todayStr}
+                min={checkoutMin}
                 max={maxDateStr}
                 onClick={handleDateInputClick}
-                onKeyDown={handleDateInputKeyDown}
                 onChange={(e) => setForm({ ...form, checkout: e.target.value })}
                 className="w-full border border-[#d6cdb8] rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#4a8fa3] cursor-pointer"
               />
@@ -221,13 +210,13 @@ export default function Home() {
           </div>
           <div className="mt-4 flex justify-end">
             <button
-              onClick={handleBookSubmit}
+              type="submit"
               className="bg-[#1b4d6e] hover:bg-[#4a8fa3] text-white font-medium px-8 py-3 rounded transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4a8fa3] shadow-sm"
             >
               {h.checkAvail}
             </button>
           </div>
-        </div>
+        </form>
       </section>
 
       {/* Highlights */}
@@ -271,7 +260,7 @@ export default function Home() {
           </Link>
         </div>
         <div className="relative">
-          <img
+          <SiteImage
             src="https://images.unsplash.com/photo-1764377723140-c68667675015?w=800&h=600&fit=crop&auto=format"
             alt="Coastal village at sunset"
             loading="lazy"
@@ -315,7 +304,7 @@ export default function Home() {
                     to={`/rooms/${r.slug}`}
                     className="overflow-hidden h-52 bg-[#d6cdb8] block"
                   >
-                    <img
+                    <SiteImage
                       src={r.images.hero}
                       alt={r.title[lang]}
                       loading="lazy"
@@ -362,7 +351,7 @@ export default function Home() {
                 to="/apartment"
                 className="overflow-hidden rounded-lg h-80 md:h-96 bg-[#d6cdb8] shadow-sm block group"
               >
-                <img
+                <SiteImage
                   src="/images/Appartment_Bedroom_View1.jpg"
                   alt="Apartment Bedroom"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
@@ -370,14 +359,14 @@ export default function Home() {
               </Link>
               <div className="grid grid-cols-2 gap-4">
                 <div className="overflow-hidden rounded-lg h-40 bg-[#d6cdb8] shadow-sm">
-                  <img
+                  <SiteImage
                     src="/images/Appartment_Kitchen.jpg"
                     alt="Apartment Kitchen"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="overflow-hidden rounded-lg h-40 bg-[#d6cdb8] shadow-sm">
-                  <img
+                  <SiteImage
                     src="/images/Appartment_Bathroom.jpg"
                     alt="Apartment Bathroom"
                     className="w-full h-full object-cover"
@@ -480,7 +469,7 @@ export default function Home() {
               }`}
               style={{ aspectRatio: i === 0 ? "4/3" : "1/1" }}
             >
-              <img
+              <SiteImage
                 src={photo.thumb}
                 alt={photo.alt.en}
                 loading="lazy"
@@ -523,7 +512,7 @@ export default function Home() {
             </button>
           </div>
           <div className="relative h-72 md:h-96 bg-[#4a8fa3]/20 rounded-lg overflow-hidden shadow-xl">
-            <img
+            <SiteImage
               src="https://images.unsplash.com/photo-1569872809440-a424ae8eced0?w=800&h=600&fit=crop&auto=format"
               alt="Rocky coast at sunset"
               loading="lazy"

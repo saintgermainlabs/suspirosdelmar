@@ -4,7 +4,7 @@ export interface GalleryPhoto {
   id: string
   url: string
   thumb: string
-  alt: { en: string es: string }
+  alt: { en: string; es: string }
   category: Exclude<GalleryCategory, "all">
 }
 
@@ -119,16 +119,6 @@ export const photos: GalleryPhoto[] = [
     alt: {
       en: "Family Shore Room with queen and single bed",
       es: "Habitación Familiar Orilla con cama matrimonial e individual",
-    },
-    category: "rooms",
-  },
-  {
-    id: "room-4",
-    url: "/images/Bedroom4.jpg",
-    thumb: "/images/Bedroom4.jpg",
-    alt: {
-      en: "Ocean Calm Room with coastal design and premium comfort",
-      es: "Habitación Calma Oceánica con diseño costero y confort premium",
     },
     category: "rooms",
   },

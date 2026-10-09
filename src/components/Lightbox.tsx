@@ -1,9 +1,9 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useLang } from "../LanguageContext"
 
 export interface LightboxImage {
   src: string
-  alt: { en: string es: string }
+  alt: { en: string; es: string }
   category?: string
 }
 
@@ -19,10 +19,37 @@ export default function Lightbox({
   onNavigate: (index: number) => void
 }) {
   const { lang, tr } = useLang()
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const isOpen = activeIndex !== null
+
+  useEffect(() => {
+    if (!isOpen) return
+    const previousFocus = document.activeElement as HTMLElement | null
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    dialogRef.current?.querySelector<HTMLButtonElement>("button")?.focus()
+    return () => {
+      document.body.style.overflow = previousOverflow
+      previousFocus?.focus()
+    }
+  }, [isOpen])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (activeIndex === null) return
+      if (e.key === "Tab") {
+        const buttons = dialogRef.current?.querySelectorAll<HTMLButtonElement>("button")
+        if (!buttons?.length) return
+        const first = buttons[0]
+        const last = buttons[buttons.length - 1]
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
       if (e.key === "Escape") onClose()
       if (e.key === "ArrowLeft") {
         const next = (activeIndex - 1 + images.length) % images.length
@@ -35,12 +62,8 @@ export default function Lightbox({
     }
 
     window.addEventListener("keydown", handleKeyDown)
-    if (activeIndex !== null) {
-      document.body.style.overflow = "hidden"
-    }
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
-      document.body.style.overflow = ""
     }
   }, [activeIndex, images.length, onClose, onNavigate])
 
@@ -50,10 +73,11 @@ export default function Lightbox({
 
   return (
     <div
+      ref={dialogRef}
       className="fixed inset-0 z-50 bg-[#0d1d28]/95 backdrop-blur-md flex flex-col justify-between p-4 md:p-8 select-none transition-opacity duration-300"
       role="dialog"
       aria-modal="true"
-      aria-label="Image preview"
+      aria-label={current.alt[lang]}
       onClick={onClose}
     >
       {/* Top Bar */}

@@ -23,7 +23,7 @@ export interface RoomInfo {
   featured?: boolean
   images: {
     hero: string
-    gallery: { src: string alt: { en: string es: string } }[]
+    gallery: { src: string; alt: { en: string; es: string } }[]
   }
   amenities: {
     en: string[]
@@ -295,13 +295,13 @@ export const roomsData: RoomInfo[] = [
     },
     featured: true,
     images: {
-      hero: "/images/Bedroom4.jpg",
+      hero: "/images/Bed.jpg",
       gallery: [
         {
-          src: "/images/Bedroom4.jpg",
+          src: "/images/Bed.jpg",
           alt: {
-            en: "Ocean Calm Room with coastal design and premium comfort",
-            es: "Habitación Calma Oceánica con diseño costero y confort premium",
+            en: "Guest bed with a traditional textile runner",
+            es: "Cama para huéspedes con un textil tradicional",
           },
         },
         {

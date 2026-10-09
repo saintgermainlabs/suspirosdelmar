@@ -1,11 +1,13 @@
+import SiteImage from "../components/SiteImage"
 import { useState } from "react"
-import { useParams, Link, Navigate } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import { useLang } from "../LanguageContext"
 import { getRoomBySlug } from "../data/roomsData"
 import BookingForm from "../components/BookingForm"
 import Lightbox from "../components/Lightbox"
 import Footer from "../components/Footer"
 import SEO from "../components/SEO"
+import NotFound from "./NotFound"
 
 export default function RoomDetail() {
   const { roomId } = useParams<{ roomId: string }>()
@@ -15,7 +17,7 @@ export default function RoomDetail() {
   const room = getRoomBySlug(roomId || "")
 
   if (!room) {
-    return <Navigate to="/rooms" replace />
+    return <NotFound />
   }
 
   const r = tr.rooms
@@ -37,7 +39,7 @@ export default function RoomDetail() {
 
       {/* Hero Header */}
       <section className="relative h-72 md:h-96 bg-[#1b4d6e] flex items-center justify-center overflow-hidden">
-        <img
+        <SiteImage loading="eager" fetchPriority="high" sizes="100vw"
           src={room.images.hero}
           alt={roomTitle}
           className="absolute inset-0 w-full h-full object-cover opacity-40"
@@ -132,7 +134,7 @@ export default function RoomDetail() {
                   onClick={() => setActivePhoto(i)}
                   className="group overflow-hidden rounded-lg bg-[#d6cdb8] aspect-[4/3] focus:outline-none focus:ring-2 focus:ring-[#4a8fa3]"
                 >
-                  <img
+                  <SiteImage
                     src={photo.src}
                     alt={photo.alt[lang]}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

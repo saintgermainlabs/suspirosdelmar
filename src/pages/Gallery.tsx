@@ -1,3 +1,4 @@
+import SiteImage from "../components/SiteImage"
 import { useState } from "react"
 import Footer from "../components/Footer"
 import SEO from "../components/SEO"
@@ -12,7 +13,7 @@ export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState<GalleryCategory>("all")
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
-  const categories: { key: GalleryCategory label: string }[] = [
+  const categories: { key: GalleryCategory; label: string }[] = [
     { key: "all", label: g.filters.all },
     { key: "beach", label: g.filters.beach },
     { key: "rooms", label: g.filters.rooms },
@@ -34,7 +35,7 @@ export default function Gallery() {
 
       {/* Hero */}
       <section className="relative h-72 md:h-96 bg-[#1b4d6e] flex items-center justify-center overflow-hidden">
-        <img
+        <SiteImage loading="eager" fetchPriority="high" sizes="100vw"
           src="/images/Common_Room_View1.jpg"
           alt="Los Suspiros del Mar common room view"
           className="absolute inset-0 w-full h-full object-cover opacity-40"
@@ -57,7 +58,8 @@ export default function Gallery() {
           {categories.map((cat) => (
             <button
               key={cat.key}
-              onClick={() => setActiveCategory(cat.key)}
+              aria-pressed={activeCategory === cat.key}
+              onClick={() => { setLightboxIndex(null); setActiveCategory(cat.key) }}
               className={`text-xs font-semibold px-5 py-2.5 rounded-full transition-all ${
                 activeCategory === cat.key
                   ? "bg-[#1b4d6e] text-white shadow-sm"
@@ -79,7 +81,7 @@ export default function Gallery() {
               onClick={() => setLightboxIndex(index)}
               className="group relative overflow-hidden rounded-lg bg-[#d6cdb8] aspect-[4/3] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4a8fa3]"
             >
-              <img
+              <SiteImage
                 src={photo.thumb}
                 alt={photo.alt[lang]}
                 loading="lazy"

@@ -1,3 +1,4 @@
+import SiteImage from "../components/SiteImage"
 import { useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
 import SEO from "../components/SEO"
@@ -26,7 +27,7 @@ export default function Experiences() {
       />
 
       <section className="relative h-72 md:h-96 bg-[#1b4d6e] flex items-center justify-center overflow-hidden">
-        <img
+        <SiteImage loading="eager" fetchPriority="high" sizes="100vw"
           src="https://images.unsplash.com/photo-1613977645186-d3e10f27a09d?w=1600&h=600&fit=crop&auto=format"
           alt="Ocean waves crashing at the shore"
           className="absolute inset-0 w-full h-full object-cover opacity-50"
@@ -60,7 +61,7 @@ export default function Experiences() {
               className="group bg-white border border-[#d6cdb8] rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
             >
               <div className="relative overflow-hidden h-48 bg-[#d6cdb8]">
-                <img
+                <SiteImage
                   src={imgs[i]}
                   alt={exp.title}
                   loading="lazy"

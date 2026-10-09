@@ -1,3 +1,4 @@
+import SiteImage from "../components/SiteImage"
 import { useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
 import SEO from "../components/SEO"
@@ -17,7 +18,7 @@ export default function About() {
       />
 
       <section className="relative h-72 md:h-96 bg-[#1b4d6e] flex items-center justify-center overflow-hidden">
-        <img
+        <SiteImage loading="eager" fetchPriority="high" sizes="100vw"
           src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&h=600&fit=crop&auto=format"
           alt="Calm sea shore at dusk"
           className="absolute inset-0 w-full h-full object-cover opacity-40"
