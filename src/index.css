@@ -20,6 +20,23 @@ body {
   font-family: 'Fraunces', serif;
 }
 
+input[type='date'] {
+  position: relative;
+  cursor: pointer;
+}
+
+/* The native trigger works even when iframe restrictions block showPicker(). */
+input[type='date']::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
 * {
   scrollbar-width: none;
 }
