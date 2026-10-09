@@ -2,6 +2,12 @@ export type Lang = "en" | "es"
 
 export const t = {
   en: {
+    datePicker: {
+      placeholder: "Select a date",
+      previous: "Previous month",
+      next: "Next month",
+      close: "Close calendar",
+    },
     // Nav
     nav: {
       home: "Home",
@@ -450,6 +456,12 @@ export const t = {
   },
 
   es: {
+    datePicker: {
+      placeholder: "Selecciona una fecha",
+      previous: "Mes anterior",
+      next: "Mes siguiente",
+      close: "Cerrar calendario",
+    },
     nav: {
       home: "Inicio",
       rooms: "Habitaciones y Apartamento",

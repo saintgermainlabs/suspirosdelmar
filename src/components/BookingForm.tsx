@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom"
 import { useLang } from "../LanguageContext"
 import { waLink } from "../site"
 import { localDateString, nextDate } from "../utils/dates"
+import DatePicker from "./DatePicker"
 
 export interface BookingFormProps {
   defaultRoomIndex?: string
@@ -127,19 +128,6 @@ export default function BookingForm({
 
   const inputClass =
     "w-full border border-[#d6cdb8] rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#4a8fa3] bg-white"
-
-  const handleDateInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
-    try {
-      if (
-        "showPicker" in e.currentTarget &&
-        typeof e.currentTarget.showPicker === "function"
-      ) {
-        e.currentTarget.showPicker()
-      }
-    } catch (_) {
-      // Fallback for browsers that block async showPicker calls
-    }
-  }
 
   return (
     <div className="bg-white border border-[#d6cdb8] rounded-lg p-6 md:p-8 shadow-md">
@@ -270,16 +258,14 @@ export default function BookingForm({
               >
                 {f.checkin} *
               </label>
-              <input
+              <DatePicker
                 id="b-checkin"
                 name="checkin"
                 required
-                type="date"
                 min={todayStr}
                 max={maxDateStr}
                 value={form.checkin}
-                onClick={handleDateInputClick}
-                onChange={(e) => setForm({ ...form, checkin: e.target.value, checkout: form.checkout > e.target.value ? form.checkout : "" })}
+                onChange={(value) => setForm({ ...form, checkin: value, checkout: form.checkout > value ? form.checkout : "" })}
                 className={`${inputClass} cursor-pointer`}
               />
             </div>
@@ -290,16 +276,14 @@ export default function BookingForm({
               >
                 {f.checkout} *
               </label>
-              <input
+              <DatePicker
                 id="b-checkout"
                 name="checkout"
                 required
-                type="date"
                 value={form.checkout}
                 min={checkoutMin}
                 max={maxDateStr}
-                onClick={handleDateInputClick}
-                onChange={(e) => setForm({ ...form, checkout: e.target.value })}
+                onChange={(value) => setForm({ ...form, checkout: value })}
                 className={`${inputClass} cursor-pointer`}
               />
             </div>

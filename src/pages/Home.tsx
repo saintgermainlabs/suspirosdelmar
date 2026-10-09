@@ -1,4 +1,5 @@
 import SiteImage from "../components/SiteImage"
+import DatePicker from "../components/DatePicker"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
@@ -33,19 +34,6 @@ export default function Home() {
   maxDate.setFullYear(maxDate.getFullYear() + 3)
   const maxDateStr = localDateString(maxDate)
   const checkoutMin = nextDate(form.checkin || todayStr)
-
-  const handleDateInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
-    try {
-      if (
-        "showPicker" in e.currentTarget &&
-        typeof e.currentTarget.showPicker === "function"
-      ) {
-        e.currentTarget.showPicker()
-      }
-    } catch (_) {
-      // Fallback
-    }
-  }
 
   const handleBookSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -133,15 +121,13 @@ export default function Home() {
               >
                 {h.checkin}
               </label>
-              <input
+              <DatePicker
                 id="home-checkin"
-                type="date"
                 min={todayStr}
                 max={maxDateStr}
                 required
                 value={form.checkin}
-                onClick={handleDateInputClick}
-                onChange={(e) => setForm({ ...form, checkin: e.target.value, checkout: form.checkout > e.target.value ? form.checkout : "" })}
+                onChange={(value) => setForm({ ...form, checkin: value, checkout: form.checkout > value ? form.checkout : "" })}
                 className="w-full border border-[#d6cdb8] rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#4a8fa3] cursor-pointer"
               />
             </div>
@@ -152,15 +138,13 @@ export default function Home() {
               >
                 {h.checkout}
               </label>
-              <input
+              <DatePicker
                 id="home-checkout"
-                type="date"
                 required
                 value={form.checkout}
                 min={checkoutMin}
                 max={maxDateStr}
-                onClick={handleDateInputClick}
-                onChange={(e) => setForm({ ...form, checkout: e.target.value })}
+                onChange={(value) => setForm({ ...form, checkout: value })}
                 className="w-full border border-[#d6cdb8] rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#4a8fa3] cursor-pointer"
               />
             </div>
