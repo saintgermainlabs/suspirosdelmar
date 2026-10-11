@@ -1,10 +1,11 @@
 import { useState } from "react"
-import { useLocation } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { useLang } from "../LanguageContext"
 import { waLink } from "../site"
-import { localDateString, nextDate } from "../utils/dates"
+import { localDateString, nextDate, requiresAdvanceDeposit } from "../utils/dates"
 import DatePicker from "./DatePicker"
 import AvailabilityCalendar from "./AvailabilityCalendar"
+import BookingPolicy from "./BookingPolicy"
 
 export interface BookingFormProps {
   defaultRoomIndex?: string
@@ -51,9 +52,11 @@ export default function BookingForm({
   const [availabilityOpen, setAvailabilityOpen] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof typeof form, string>>>({})
 
+  const advanceDeposit = requiresAdvanceDeposit(form.checkin)
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (isSubmitting) return
+    if (isSubmitting || advanceDeposit) return
     const errors: Partial<Record<keyof typeof form, string>> = {}
     for (const key of Object.keys(form) as (keyof typeof form)[]) {
       if (!form[key].trim()) errors[key] = c.validation.required
@@ -91,6 +94,7 @@ export default function BookingForm({
       form.checkout ? `Check-out: ${form.checkout}` : null,
       form.guests ? `Huéspedes: ${form.guests}` : null,
       selectedRoom ? `Habitación: ${selectedRoom}` : null,
+      "Preferencia de pago: al llegar (solicitud pendiente de confirmación)",
       form.message ? `Mensaje: ${form.message.trim()}` : null,
     ]
       .filter(Boolean)
@@ -112,6 +116,7 @@ export default function BookingForm({
           checkout: form.checkout,
           guests: form.guests,
           room: selectedRoom,
+          payment_preference: "on_arrival",
           message: formattedBookingMessage || form.message,
         }),
       })
@@ -402,14 +407,24 @@ export default function BookingForm({
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-[#1b4d6e] hover:bg-[#4a8fa3] text-white font-medium py-3.5 rounded transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4a8fa3] disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+          <BookingPolicy checkin={form.checkin} />
+          <Link
+            to="/reservar"
+            state={{ checkin: form.checkin, checkout: form.checkout, guests: form.guests, name: form.name, email: form.email, phone: form.phone }}
+            className="block w-full rounded bg-[#1b4d6e] py-3.5 text-center text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#4a8fa3] focus-visible:outline-2 focus-visible:outline-offset-2"
           >
-            {isSubmitting ? "..." : f.submit}
-          </button>
-          <p className="text-xs text-[#6b6355] text-center">{f.note}</p>
+            {tr.bookingPolicy.gateway}
+          </Link>
+          {form.checkin && !advanceDeposit && <>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full border border-[#1b4d6e] text-[#1b4d6e] font-medium py-3.5 rounded transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4a8fa3] disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+            >
+              {isSubmitting ? "..." : tr.bookingPolicy.arrival}
+            </button>
+            <p className="text-xs text-[#6b6355] text-center">{f.note}</p>
+          </>}
         </form>
       )}
     </div>

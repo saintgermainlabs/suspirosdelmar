@@ -7,3 +7,9 @@ export function nextDate(value: string): string {
   date.setDate(date.getDate() + 1)
   return localDateString(date)
 }
+
+export function requiresAdvanceDeposit(checkin: string, today = new Date()): boolean {
+  const threshold = new Date(today)
+  threshold.setDate(threshold.getDate() + 30)
+  return Boolean(checkin && checkin >= localDateString(threshold))
+}

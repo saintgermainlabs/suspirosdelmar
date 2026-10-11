@@ -21,6 +21,8 @@ The form creates a hold with the selected provider, saves reference/email/dates 
 
 Status polling verifies backend status, never the `pago` query parameter. Cancelled and expired bookings cannot reopen checkout; guests start a new booking. Pending holds can retry checkout. Transient status failures stop automatic polling after three failures and provide manual retry.
 
-Deposit percentage and amounts come from Casita. The earlier 50% / payment-on-arrival policy is not part of the supplied API and is not implemented. Existing n8n inquiries remain unchanged and do not confirm a reservation.
+Bookings with check-in 30 calendar days or more from the guest's local date require a 50% deposit and only offer online checkout. Nearer bookings also offer payment-on-arrival inquiries through n8n; these do not confirm a reservation. The inquiry includes `payment_preference: "on_arrival"` and describes that preference in its message. Viewing appointments link to the existing TidyCal calendar and do not reserve accommodation.
+
+Deposit percentages and amounts remain authoritative in Casita. Configure the property's deposit percentage to 50 before accepting advance bookings. The website blocks advance checkout if Casita advertises a different percentage or returns a hold whose deposit is not 50% of its total. The separate backend must enforce this policy too; frontend controls cannot enforce it against direct API calls. No undocumented deposit or payment-on-arrival fields are sent to the Casita API.
 
 Live testing requires a deployed API and property ID. Normal tests must mock Casita and must not create real bookings or payments.

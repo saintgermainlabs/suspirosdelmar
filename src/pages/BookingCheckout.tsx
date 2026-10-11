@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useLang } from "../LanguageContext"
 import DatePicker from "../components/DatePicker"
-import { localDateString, nextDate } from "../utils/dates"
+import BookingPolicy from "../components/BookingPolicy"
+import { localDateString, nextDate, requiresAdvanceDeposit } from "../utils/dates"
 import { casita, casitaRequest, overlaps, paymentError, saveBooking } from "../utils/casita"
 import type { Hold, Provider, RoomsResponse } from "../utils/casita"
 
@@ -11,8 +12,10 @@ export default function BookingCheckout() {
   const p = tr.payments
   const f = tr.contact.fields
   const navigate = useNavigate()
-  const prefill = (useLocation().state ?? {}) as { checkin?: string; checkout?: string; guests?: string }
-  const [form, setForm] = useState({ roomId: "", checkIn: prefill.checkin || "", checkOut: prefill.checkout || "", guests: prefill.guests || "2", name: "", email: "", phone: "" })
+  const prefill = (useLocation().state ?? {}) as { checkin?: string; checkout?: string; guests?: string; name?: string; email?: string; phone?: string }
+  const [form, setForm] = useState({ roomId: "", checkIn: prefill.checkin || "", checkOut: prefill.checkout || "", guests: prefill.guests || "2", name: prefill.name || "", email: prefill.email || "", phone: prefill.phone || "" })
+  const advanceDeposit = requiresAdvanceDeposit(form.checkIn)
+  const [depositMismatch, setDepositMismatch] = useState(false)
   const [data, setData] = useState<RoomsResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState(false)
@@ -42,6 +45,8 @@ export default function BookingCheckout() {
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (busy) return
+    setDepositMismatch(false)
+    if (advanceDeposit && data?.property.depositPercent !== 50) { setDepositMismatch(true); return }
     const provider = ((event.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null)?.value as Provider | undefined
     if (!room || !provider || !form.name.trim() || form.checkIn < today || form.checkOut <= form.checkIn || Number(form.guests) > room.maxGuests || Number(form.guests) < 1) { setError("invalid"); return }
     if ((provider === "paypal" && (!room.bookableUsd || room.rateUsd === null)) || (provider === "mercadopago" && (!room.bookablePen || room.ratePen === null))) { setError("noRate"); return }
@@ -54,6 +59,7 @@ export default function BookingCheckout() {
       if (overlaps(form.checkIn, form.checkOut, latest.unavailable?.[room.id] ?? [])) { setError("conflict"); setRefresh(r => r + 1); return }
       const hold = await casitaRequest<Hold>("/bookings/hold", { method: "POST", body: JSON.stringify({ roomId: room.id, checkIn: form.checkIn, checkOut: form.checkOut, guests: Number(form.guests), guestName: form.name.trim(), guestEmail: form.email.trim(), guestPhone: form.phone.trim() || undefined, guestLang: lang, provider }) })
       if (!hold.publicRef || !Number.isFinite(Date.parse(hold.holdExpiresAt))) throw new Error("Invalid hold response")
+      if (advanceDeposit && (!Number.isFinite(hold.total) || hold.total <= 0 || !Number.isFinite(hold.deposit) || Math.abs(hold.deposit - hold.total * 0.5) > 0.01)) { setDepositMismatch(true); return }
       const booking = { email: form.email.trim(), checkIn: form.checkIn, checkOut: form.checkOut, hold }
       saveBooking(booking)
       navigate(`/reserva/${encodeURIComponent(hold.publicRef)}`, { state: { booking, startCheckout: true } })
@@ -64,6 +70,8 @@ export default function BookingCheckout() {
     <section className="rounded-2xl border border-[#d6cdb8] bg-[#faf6ef] p-6 shadow-sm md:p-10">
       <h1 className="font-display text-3xl text-[#1b4d6e]">{p.title}</h1>
       <p className="my-4 text-[#6b6355]">{p.intro}</p>
+      <div className="mb-5"><BookingPolicy checkin={form.checkIn} /></div>
+      {depositMismatch && <p role="alert" className="my-4 rounded-lg border border-[#d8755b] p-4">{tr.bookingPolicy.depositMismatch}</p>}
       {!casita.propertyId ? <><p role="status">{p.unavailable}</p><Link className="mt-5 inline-block underline" to="/contact">{tr.nav.contact}</Link></> : <>
         {loading && <p role="status">{p.loading}</p>}
         {error && <div role="alert" className="my-4 rounded-lg border border-[#d8755b] p-4">{p[error]} {!data && <button className="ml-3 underline" onClick={() => setRefresh(r => r + 1)}>{p.retry}</button>}</div>}
@@ -84,6 +92,7 @@ export default function BookingCheckout() {
               {(!room || room.rateUsd !== null) && <button type="submit" value="paypal" disabled={!room?.bookableUsd || loading} className={button}>{p.paypal}</button>}
             </div>
           </fieldset>
+          {form.checkIn && !advanceDeposit && <Link to="/contact" state={{ checkin: form.checkIn, checkout: form.checkOut, guests: form.guests }} className="block rounded-lg border border-[#1b4d6e] px-5 py-3 text-center text-sm font-medium text-[#1b4d6e]">{tr.bookingPolicy.arrival}</Link>}
           {busy && <p role="status">{p.processing}</p>}
         </form>)}
       </>}
