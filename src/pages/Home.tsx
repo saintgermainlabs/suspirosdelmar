@@ -21,7 +21,7 @@ export default function Home() {
     checkin: "",
     checkout: "",
     guests: "2",
-    roomIndex: "",
+    roomIndex: "0",
   })
 
   const highlights = [
@@ -198,7 +198,6 @@ export default function Home() {
                 }
                 className="w-full border border-[#d6cdb8] rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#4a8fa3]"
               >
-                <option value="">{h.anyRoom}</option>
                 {tr.contact.roomOptions.map((o, i) => (
                   <option key={o} value={i}>
                     {o}

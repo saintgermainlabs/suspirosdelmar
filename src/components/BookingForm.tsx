@@ -18,7 +18,7 @@ export interface BookingFormProps {
 }
 
 export default function BookingForm({
-  defaultRoomIndex = "",
+  defaultRoomIndex = "0",
   lockRoomSelect = false,
   initialCheckin = "",
   initialCheckout = "",
@@ -67,10 +67,7 @@ export default function BookingForm({
     setIsSubmitting(true)
     setError(null)
 
-    const selectedRoom =
-      form.roomIndex !== ""
-        ? c.roomOptions[Number(form.roomIndex)]
-        : "No preference"
+    const selectedRoom = c.roomOptions[Number(form.roomIndex)]
     const webhookUrl =
       import.meta.env.VITE_N8N_WEBHOOK_URL ||
       "https://n8n.sg-labs.xyz/webhook/submit"
@@ -342,7 +339,6 @@ export default function BookingForm({
                   : ""
               }`}
             >
-              <option value="">{f.noPreference}</option>
               {c.roomOptions.map((o, i) => (
                 <option key={o} value={i}>
                   {o}
