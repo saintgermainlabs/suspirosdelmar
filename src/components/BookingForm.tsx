@@ -1,7 +1,8 @@
 import { useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useLang } from "../LanguageContext"
 import { waLink } from "../site"
+import { roomsData } from "../data/roomsData"
 import { localDateString, nextDate, requiresAdvanceDeposit } from "../utils/dates"
 import DatePicker from "./DatePicker"
 import AvailabilityCalendar from "./AvailabilityCalendar"
@@ -51,12 +52,14 @@ export default function BookingForm({
   const [error, setError] = useState<string | null>(null)
   const [availabilityOpen, setAvailabilityOpen] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof typeof form, string>>>({})
-
+  const [paymentChoice, setPaymentChoice] = useState<"now" | "on_arrival">("on_arrival")
+  const navigate = useNavigate()
   const advanceDeposit = requiresAdvanceDeposit(form.checkin)
+  const payNow = advanceDeposit || paymentChoice === "now"
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (isSubmitting || advanceDeposit) return
+    if (isSubmitting) return
     const errors: Partial<Record<keyof typeof form, string>> = {}
     for (const key of Object.keys(form) as (keyof typeof form)[]) {
       if (!form[key].trim()) errors[key] = c.validation.required
@@ -81,6 +84,19 @@ export default function BookingForm({
     const firstInvalid = (Object.keys(errors) as (keyof typeof form)[])[0]
     if (firstInvalid) {
       document.getElementById(firstInvalid === "roomIndex" ? "b-room" : `b-${firstInvalid}`)?.focus()
+      return
+    }
+    if (payNow) {
+      navigate("/reservar", { state: {
+        checkin: form.checkin,
+        checkout: form.checkout,
+        guests: form.guests,
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        accommodationId: roomsData[Number(form.roomIndex)].id,
+        accommodationName: c.roomOptions[Number(form.roomIndex)],
+      } })
       return
     }
     setIsSubmitting(true)
@@ -408,23 +424,27 @@ export default function BookingForm({
           )}
 
           <BookingPolicy checkin={form.checkin} />
-          <Link
-            to="/reservar"
-            state={{ checkin: form.checkin, checkout: form.checkout, guests: form.guests, name: form.name, email: form.email, phone: form.phone }}
-            className="block w-full rounded bg-[#1b4d6e] py-3.5 text-center text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#4a8fa3] focus-visible:outline-2 focus-visible:outline-offset-2"
+          <fieldset className="rounded-lg border border-[#d6cdb8] p-4">
+            <legend className="px-1 text-sm font-medium text-[#1b4d6e]">{tr.inquiryPayment.title}</legend>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="flex cursor-pointer items-start gap-2 rounded border border-[#d6cdb8] p-3 text-sm">
+                <input type="radio" name="payment_preference" value="now" checked={payNow} onChange={() => setPaymentChoice("now")} className="mt-1 accent-[#1b4d6e]" />
+                <span><span className="block font-medium">{tr.inquiryPayment.now}</span><span className="mt-1 block text-xs text-[#6b6355]">{tr.inquiryPayment.deposit}</span></span>
+              </label>
+              <label className={`flex items-start gap-2 rounded border border-[#d6cdb8] p-3 text-sm ${advanceDeposit ? "opacity-50" : "cursor-pointer"}`}>
+                <input type="radio" name="payment_preference" value="on_arrival" checked={!payNow} disabled={advanceDeposit} onChange={() => setPaymentChoice("on_arrival")} className="mt-1 accent-[#1b4d6e]" />
+                <span><span className="block font-medium">{tr.inquiryPayment.arrival}</span><span className="mt-1 block text-xs text-[#6b6355]">{tr.inquiryPayment.inquiry}</span></span>
+              </label>
+            </div>
+          </fieldset>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full rounded bg-[#1b4d6e] py-3.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#4a8fa3] focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {tr.bookingPolicy.gateway}
-          </Link>
-          {form.checkin && !advanceDeposit && <>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full border border-[#1b4d6e] text-[#1b4d6e] font-medium py-3.5 rounded transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4a8fa3] disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-            >
-              {isSubmitting ? "..." : tr.bookingPolicy.arrival}
-            </button>
-            <p className="text-xs text-[#6b6355] text-center">{f.note}</p>
-          </>}
+            {isSubmitting ? "..." : payNow ? tr.bookingPolicy.gateway : tr.bookingPolicy.arrival}
+          </button>
+          {!payNow && <p className="text-xs text-[#6b6355] text-center">{f.note}</p>}
         </form>
       )}
     </div>

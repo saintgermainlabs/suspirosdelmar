@@ -2,6 +2,13 @@ export type Lang = "en" | "es"
 
 export const t = {
   en: {
+    inquiryPayment: {
+      title: "When would you like to pay?",
+      now: "Pay now",
+      arrival: "Pay on arrival",
+      deposit: "Continue to secure checkout to pay the configured deposit.",
+      inquiry: "Send a booking request; your stay is subject to confirmation.",
+    },
     availability: {
       button: "View availability",
       tag: "Plan your stay",
@@ -551,6 +558,13 @@ export const t = {
   },
 
   es: {
+    inquiryPayment: {
+      title: "¿Cuándo deseas pagar?",
+      now: "Pagar ahora",
+      arrival: "Pagar al llegar",
+      deposit: "Continúa al pago seguro para abonar el depósito configurado.",
+      inquiry: "Envía una solicitud de reserva; tu estadía está sujeta a confirmación.",
+    },
     availability: {
       button: "Ver disponibilidad",
       tag: "Planifica tu estadía",

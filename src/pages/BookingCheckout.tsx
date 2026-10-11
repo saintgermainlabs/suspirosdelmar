@@ -12,7 +12,7 @@ export default function BookingCheckout() {
   const p = tr.payments
   const f = tr.contact.fields
   const navigate = useNavigate()
-  const prefill = (useLocation().state ?? {}) as { checkin?: string; checkout?: string; guests?: string; name?: string; email?: string; phone?: string }
+  const prefill = (useLocation().state ?? {}) as { checkin?: string; checkout?: string; guests?: string; name?: string; email?: string; phone?: string; accommodationId?: string; accommodationName?: string }
   const [form, setForm] = useState({ roomId: "", checkIn: prefill.checkin || "", checkOut: prefill.checkout || "", guests: prefill.guests || "2", name: prefill.name || "", email: prefill.email || "", phone: prefill.phone || "" })
   const advanceDeposit = requiresAdvanceDeposit(form.checkIn)
   const [depositMismatch, setDepositMismatch] = useState(false)
@@ -33,11 +33,16 @@ export default function BookingCheckout() {
     setError(null)
     const params = new URLSearchParams({ propertyId: casita.propertyId, from: today, to: max })
     casitaRequest<RoomsResponse>(`/rooms?${params}`, { signal: controller.signal })
-      .then(result => { if (!controller.signal.aborted) setData(result) })
+      .then(result => {
+        if (controller.signal.aborted) return
+        setData(result)
+        const selected = result.rooms.find(item => item.id === prefill.accommodationId || Boolean(prefill.accommodationName && item.name.trim().toLowerCase() === prefill.accommodationName.trim().toLowerCase()))
+        if (selected) setForm(previous => previous.roomId ? previous : { ...previous, roomId: selected.id })
+      })
       .catch(err => { if (!controller.signal.aborted) setError(paymentError(err)) })
       .finally(() => { if (!controller.signal.aborted) setLoading(false) })
     return () => controller.abort()
-  }, [refresh, today, max])
+  }, [refresh, today, max, prefill.accommodationId, prefill.accommodationName])
   const ranges = data?.unavailable?.[form.roomId] ?? []
   const field = "w-full rounded-lg border border-[#d6cdb8] bg-white px-3 py-3 text-sm focus-visible:outline-2 focus-visible:outline-[#d8755b]"
   const button = "rounded-lg bg-[#d8755b] px-5 py-3 font-medium text-white hover:bg-[#bd6048] disabled:opacity-50"
