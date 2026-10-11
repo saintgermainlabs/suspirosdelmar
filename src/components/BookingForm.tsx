@@ -4,6 +4,7 @@ import { useLang } from "../LanguageContext"
 import { waLink } from "../site"
 import { localDateString, nextDate } from "../utils/dates"
 import DatePicker from "./DatePicker"
+import AvailabilityCalendar from "./AvailabilityCalendar"
 
 export interface BookingFormProps {
   defaultRoomIndex?: string
@@ -47,6 +48,7 @@ export default function BookingForm({
   const [sent, setSent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [availabilityOpen, setAvailabilityOpen] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof typeof form, string>>>({})
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -160,6 +162,15 @@ export default function BookingForm({
       <h2 className="font-display text-2xl md:text-3xl text-[#1b4d6e] mb-6">
         {title || c.formTitle}
       </h2>
+      <button
+        type="button"
+        aria-haspopup="dialog"
+        onClick={() => setAvailabilityOpen(true)}
+        className="mb-3 flex w-full items-center justify-center gap-2 rounded-lg border border-[#4a8fa3] bg-[#1b4d6e] px-5 py-3 text-sm font-medium text-white hover:bg-[#4a8fa3] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4a8fa3]"
+      >
+        <span aria-hidden="true">▦</span> {tr.availability.button}
+      </button>
+      <AvailabilityCalendar open={availabilityOpen} onClose={() => setAvailabilityOpen(false)} />
       <Link
         to="/reservar"
         state={{ checkin: form.checkin, checkout: form.checkout, guests: form.guests }}

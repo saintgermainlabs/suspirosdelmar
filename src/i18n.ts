@@ -2,6 +2,22 @@ export type Lang = "en" | "es"
 
 export const t = {
   en: {
+    availability: {
+      button: "View availability",
+      tag: "Plan your stay",
+      title: "Accommodation availability",
+      note: "Availability is shown by night. Viewing this calendar does not reserve dates; availability can change before booking.",
+      accommodation: "Accommodation",
+      close: "Close availability calendar",
+      loading: "Loading live availability…",
+      error: "We couldn’t load availability. Please try again.",
+      notConfigured: "Live availability is not configured yet. Please contact us to confirm dates.",
+      unknown: "Availability data is missing for this accommodation. Dates are not marked as available.",
+      available: "Available",
+      unavailable: "Unavailable",
+      unknownDay: "Not confirmed",
+      past: "Past date",
+    },
     apartmentViewing: {
       tag: "Viewings & calls",
       title: "Visit the apartment or book a call",
@@ -521,6 +537,22 @@ export const t = {
   },
 
   es: {
+    availability: {
+      button: "Ver disponibilidad",
+      tag: "Planifica tu estadía",
+      title: "Disponibilidad de alojamiento",
+      note: "La disponibilidad se muestra por noche. Consultar este calendario no reserva fechas; la disponibilidad puede cambiar antes de reservar.",
+      accommodation: "Alojamiento",
+      close: "Cerrar calendario de disponibilidad",
+      loading: "Cargando disponibilidad en tiempo real…",
+      error: "No pudimos cargar la disponibilidad. Inténtalo de nuevo.",
+      notConfigured: "La disponibilidad en tiempo real aún no está configurada. Contáctanos para confirmar las fechas.",
+      unknown: "Faltan datos de disponibilidad para este alojamiento. Las fechas no se marcan como disponibles.",
+      available: "Disponible",
+      unavailable: "No disponible",
+      unknownDay: "Sin confirmar",
+      past: "Fecha pasada",
+    },
     apartmentViewing: {
       tag: "Visitas y llamadas",
       title: "Visita el apartamento o agenda una llamada",
