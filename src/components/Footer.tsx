@@ -25,9 +25,10 @@ export default function Footer({
         <div className="md:col-span-2 space-y-4">
           <Link
             to="/"
-            className="font-display text-2xl text-white tracking-wide block hover:opacity-80 transition-opacity"
+            className="font-display text-2xl text-white tracking-wide flex items-center gap-3 hover:opacity-80 transition-opacity"
           >
-            Los Suspiros del Mar
+            <img src="/favicon.svg" alt="" width="52" height="52" />
+            <span>Los Suspiros del Mar</span>
           </Link>
           <p className="text-sm leading-relaxed max-w-md text-[#a8bdc9]">
             {f.tagline}

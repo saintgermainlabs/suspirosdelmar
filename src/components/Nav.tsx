@@ -21,9 +21,14 @@ export default function Nav() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link
           to="/"
-          className="font-display text-xl font-semibold text-[#1b4d6e] tracking-wide hover:opacity-80 transition-opacity"
+          aria-label="Los Suspiros del Mar"
+          className="flex items-center gap-2 font-display text-[#1b4d6e] hover:opacity-80 transition-opacity shrink-0"
         >
-          Los Suspiros del Mar
+          <img src="/assets/logo-wave.svg" alt="" width="40" height="40" className="h-9 w-9 sm:h-10 sm:w-10" />
+          <span className="flex flex-col">
+            <span className="text-base sm:text-lg font-semibold leading-tight">Los Suspiros</span>
+            <span className="text-xs tracking-[0.2em] leading-tight">del Mar</span>
+          </span>
         </Link>
 
         {/* Desktop nav */}

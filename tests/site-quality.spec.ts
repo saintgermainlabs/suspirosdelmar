@@ -5,7 +5,7 @@ test("metadata uses clean canonical URLs and resets social images", async ({ pag
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/rooms\/sea-breeze$/)
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /^https?:\/\/.*\/images\/Bedroom1.jpg$/)
   await page.goto("/contact")
-  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /^https?:\/\/.*\/images\/Common_Room_View1.jpg$/)
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /^https?:\/\/.*\/assets\/og-los-suspiros-del-mar.png$/)
 })
 
 test("booking requires checkout after checkin without sending a request", async ({ page }) => {

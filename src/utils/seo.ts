@@ -21,7 +21,7 @@ export function updateSEO({
   const canonicalUrl = new URL(url || window.location.href)
   canonicalUrl.search = ""
   canonicalUrl.hash = ""
-  const socialImage = new URL(image || "/images/Common_Room_View1.jpg", canonicalUrl.origin).href
+  const socialImage = new URL(image || "/assets/og-los-suspiros-del-mar.png", canonicalUrl.origin).href
   let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
   if (!canonical) {
     canonical = document.createElement("link")
