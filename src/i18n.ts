@@ -2,6 +2,12 @@ export type Lang = "en" | "es"
 
 export const t = {
   en: {
+    apartmentViewing: {
+      tag: "Apartment viewings",
+      title: "Come see the apartment",
+      description: "Schedule an appointment to visit the apartment in person. This calendar is only for viewings, not overnight stays or accommodation reservations.",
+      openNewTab: "Schedule your viewing in a new tab →",
+    },
     payments: {
       title: "Book and pay securely",
       intro: "Choose a room and pay your deposit on Mercado Pago or PayPal. Your booking is confirmed only after Casita verifies payment.",
@@ -508,6 +514,12 @@ export const t = {
   },
 
   es: {
+    apartmentViewing: {
+      tag: "Visitas al apartamento",
+      title: "Ven a conocer el apartamento",
+      description: "Agenda una cita para visitar el apartamento en persona. Este calendario es solo para visitas, no para estadías ni reservas de alojamiento.",
+      openNewTab: "Agenda tu visita en una nueva pestaña →",
+    },
     payments: {
       title: "Reserva y paga de forma segura",
       intro: "Elige una habitación y paga el depósito en Mercado Pago o PayPal. Tu reserva se confirma solo cuando Casita verifica el pago.",

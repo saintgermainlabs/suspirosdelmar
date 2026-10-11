@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import Footer from "../components/Footer"
 import { useLang } from "../LanguageContext"
 import BookingForm from "../components/BookingForm"
+import ApartmentViewing from "../components/ApartmentViewing"
 import Lightbox from "../components/Lightbox"
 import SEO from "../components/SEO"
 import { roomsData } from "../data/roomsData"
@@ -189,6 +190,8 @@ export default function Apartment() {
           />
         </div>
       </section>
+
+      <ApartmentViewing />
 
       {/* Photo tour */}
       <section className="bg-[#ede8df] py-20">
