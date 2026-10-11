@@ -429,6 +429,13 @@ export const t = {
       datesHint: "Tap the dates to see live availability and book online.",
     },
     contact: {
+      validation: {
+        required: "This field is required.",
+        email: "Enter a valid email address.",
+        phone: "Enter a valid phone number (7–15 digits).",
+        dates: "Choose a valid date from the calendar.",
+        checkout: "Check-out must be after check-in.",
+      },
       submissionError: "Something went wrong. You can contact us directly on WhatsApp.",
       tag: "Get in touch",
       heroTitle: "Contact & Location",
@@ -933,6 +940,13 @@ export const t = {
       datesHint: "Toca las fechas para ver la disponibilidad real y reservar en línea.",
     },
     contact: {
+      validation: {
+        required: "Este campo es obligatorio.",
+        email: "Ingresa un correo electrónico válido.",
+        phone: "Ingresa un teléfono válido (entre 7 y 15 dígitos).",
+        dates: "Selecciona una fecha válida en el calendario.",
+        checkout: "La fecha de salida debe ser posterior a la llegada.",
+      },
       submissionError: "Ocurrió un inconveniente. Puedes contactarnos directamente por WhatsApp.",
       tag: "Contáctanos",
       heroTitle: "Contacto y Ubicación",

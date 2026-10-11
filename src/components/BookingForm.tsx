@@ -47,12 +47,38 @@ export default function BookingForm({
   const [sent, setSent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof typeof form, string>>>({})
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (isSubmitting) return
-    setIsSubmitting(true)
+    const errors: Partial<Record<keyof typeof form, string>> = {}
+    for (const key of Object.keys(form) as (keyof typeof form)[]) {
+      if (!form[key].trim()) errors[key] = c.validation.required
+    }
+    if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      errors.email = c.validation.email
+    }
+    if (form.phone.trim() && (!/^\+?[\d\s().-]+$/.test(form.phone.trim()) || form.phone.replace(/\D/g, "").length < 7 || form.phone.replace(/\D/g, "").length > 15)) {
+      errors.phone = c.validation.phone
+    }
+    for (const key of ["checkin", "checkout"] as const) {
+      const value = form[key]
+      if (value && (!/^\d{4}-\d{2}-\d{2}$/.test(value) || Number.isNaN(Date.parse(`${value}T12:00:00`)) || value < todayStr || value > maxDateStr)) {
+        errors[key] = c.validation.dates
+      }
+    }
+    if (form.checkout && form.checkin && form.checkout <= form.checkin) errors.checkout = c.validation.checkout
+    if (!["1", "2", "3", "4", "5"].includes(form.guests)) errors.guests = c.validation.required
+    if (!/^\d+$/.test(form.roomIndex) || !c.roomOptions[Number(form.roomIndex)]) errors.roomIndex = c.validation.required
+    setFieldErrors(errors)
     setError(null)
+    const firstInvalid = (Object.keys(errors) as (keyof typeof form)[])[0]
+    if (firstInvalid) {
+      document.getElementById(firstInvalid === "roomIndex" ? "b-room" : `b-${firstInvalid}`)?.focus()
+      return
+    }
+    setIsSubmitting(true)
 
     const selectedRoom = c.roomOptions[Number(form.roomIndex)]
     const webhookUrl =
@@ -63,7 +89,7 @@ export default function BookingForm({
       form.checkout ? `Check-out: ${form.checkout}` : null,
       form.guests ? `Huéspedes: ${form.guests}` : null,
       selectedRoom ? `Habitación: ${selectedRoom}` : null,
-      form.message ? `Mensaje: ${form.message}` : null,
+      form.message ? `Mensaje: ${form.message.trim()}` : null,
     ]
       .filter(Boolean)
       .join("\n")
@@ -77,9 +103,9 @@ export default function BookingForm({
         },
         body: JSON.stringify({
           form_type: "contact",
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
           checkin: form.checkin,
           checkout: form.checkout,
           guests: form.guests,
@@ -171,7 +197,7 @@ export default function BookingForm({
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label
@@ -182,6 +208,8 @@ export default function BookingForm({
               </label>
               <input
                 id="b-name"
+                aria-invalid={Boolean(fieldErrors.name)}
+                aria-describedby={fieldErrors.name ? "b-name-error" : undefined}
                 name="name"
                 required
                 autoComplete="name"
@@ -190,6 +218,7 @@ export default function BookingForm({
                 placeholder={f.namePlaceholder}
                 className={inputClass}
               />
+              {fieldErrors.name && <p id="b-name-error" role="alert" className="mt-1 text-xs text-red-600">{fieldErrors.name}</p>}
             </div>
             <div>
               <label
@@ -200,6 +229,8 @@ export default function BookingForm({
               </label>
               <input
                 id="b-email"
+                aria-invalid={Boolean(fieldErrors.email)}
+                aria-describedby={fieldErrors.email ? "b-email-error" : undefined}
                 name="email"
                 required
                 type="email"
@@ -209,6 +240,7 @@ export default function BookingForm({
                 placeholder={f.emailPlaceholder}
                 className={inputClass}
               />
+              {fieldErrors.email && <p id="b-email-error" role="alert" className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>}
             </div>
           </div>
 
@@ -218,11 +250,14 @@ export default function BookingForm({
                 htmlFor="b-phone"
                 className="block text-xs text-[#6b6355] mb-1"
               >
-                {f.phone}
+                {f.phone} *
               </label>
               <input
                 id="b-phone"
+                aria-invalid={Boolean(fieldErrors.phone)}
+                aria-describedby={fieldErrors.phone ? "b-phone-error" : undefined}
                 name="phone"
+                required
                 type="tel"
                 autoComplete="tel"
                 value={form.phone}
@@ -230,17 +265,21 @@ export default function BookingForm({
                 placeholder={f.phonePlaceholder}
                 className={inputClass}
               />
+              {fieldErrors.phone && <p id="b-phone-error" role="alert" className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>}
             </div>
             <div>
               <label
                 htmlFor="b-guests"
                 className="block text-xs text-[#6b6355] mb-1"
               >
-                {f.guests}
+                {f.guests} *
               </label>
               <select
                 id="b-guests"
+                aria-invalid={Boolean(fieldErrors.guests)}
+                aria-describedby={fieldErrors.guests ? "b-guests-error" : undefined}
                 name="guests"
+                required
                 value={form.guests}
                 onChange={(e) => setForm({ ...form, guests: e.target.value })}
                 className={inputClass}
@@ -251,6 +290,7 @@ export default function BookingForm({
                   </option>
                 ))}
               </select>
+              {fieldErrors.guests && <p id="b-guests-error" role="alert" className="mt-1 text-xs text-red-600">{fieldErrors.guests}</p>}
             </div>
           </div>
 
@@ -264,6 +304,8 @@ export default function BookingForm({
               </label>
               <DatePicker
                 id="b-checkin"
+                aria-invalid={Boolean(fieldErrors.checkin)}
+                aria-describedby={fieldErrors.checkin ? "b-checkin-error" : undefined}
                 name="checkin"
                 required
                 min={todayStr}
@@ -272,6 +314,7 @@ export default function BookingForm({
                 onChange={(value) => setForm({ ...form, checkin: value, checkout: form.checkout > value ? form.checkout : "" })}
                 className={`${inputClass} cursor-pointer`}
               />
+              {fieldErrors.checkin && <p id="b-checkin-error" role="alert" className="mt-1 text-xs text-red-600">{fieldErrors.checkin}</p>}
             </div>
             <div>
               <label
@@ -282,6 +325,8 @@ export default function BookingForm({
               </label>
               <DatePicker
                 id="b-checkout"
+                aria-invalid={Boolean(fieldErrors.checkout)}
+                aria-describedby={fieldErrors.checkout ? "b-checkout-error" : undefined}
                 name="checkout"
                 required
                 value={form.checkout}
@@ -290,6 +335,7 @@ export default function BookingForm({
                 onChange={(value) => setForm({ ...form, checkout: value })}
                 className={`${inputClass} cursor-pointer`}
               />
+              {fieldErrors.checkout && <p id="b-checkout-error" role="alert" className="mt-1 text-xs text-red-600">{fieldErrors.checkout}</p>}
             </div>
           </div>
 
@@ -298,10 +344,13 @@ export default function BookingForm({
               htmlFor="b-room"
               className="block text-xs text-[#6b6355] mb-1"
             >
-              {f.room}
+              {f.room} *
             </label>
             <select
               id="b-room"
+              aria-invalid={Boolean(fieldErrors.roomIndex)}
+              aria-describedby={fieldErrors.roomIndex ? "b-room-error" : undefined}
+              required
               name="room"
               disabled={lockRoomSelect}
               value={form.roomIndex}
@@ -318,6 +367,7 @@ export default function BookingForm({
                 </option>
               ))}
             </select>
+            {fieldErrors.roomIndex && <p id="b-room-error" role="alert" className="mt-1 text-xs text-red-600">{fieldErrors.roomIndex}</p>}
           </div>
 
           <div>
@@ -325,10 +375,13 @@ export default function BookingForm({
               htmlFor="b-message"
               className="block text-xs text-[#6b6355] mb-1"
             >
-              {f.message}
+              {f.message} *
             </label>
             <textarea
               id="b-message"
+              aria-invalid={Boolean(fieldErrors.message)}
+              aria-describedby={fieldErrors.message ? "b-message-error" : undefined}
+              required
               name="message"
               value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
@@ -336,6 +389,7 @@ export default function BookingForm({
               placeholder={f.messagePlaceholder}
               className={`${inputClass} resize-none`}
             />
+            {fieldErrors.message && <p id="b-message-error" role="alert" className="mt-1 text-xs text-red-600">{fieldErrors.message}</p>}
           </div>
 
           {error && (

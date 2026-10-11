@@ -12,9 +12,11 @@ interface DatePickerProps {
   className: string
   onChange: (value: string) => void
   isDateDisabled?: (date: string) => boolean
+  "aria-invalid"?: boolean
+  "aria-describedby"?: string
 }
 
-export default function DatePicker({ id, name, value, min, max, required, className, onChange, isDateDisabled }: DatePickerProps) {
+export default function DatePicker({ id, name, value, min, max, required, className, onChange, isDateDisabled, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }: DatePickerProps) {
   const { lang, tr } = useLang()
   const c = tr.datePicker
   const dialog = useRef<HTMLDialogElement>(null)
@@ -44,6 +46,8 @@ export default function DatePicker({ id, name, value, min, max, required, classN
         ref={trigger}
         id={id}
         type="button"
+        aria-invalid={ariaInvalid}
+        aria-describedby={ariaDescribedBy}
         aria-haspopup="dialog"
         aria-controls={`${id}-calendar`}
         onClick={open}
