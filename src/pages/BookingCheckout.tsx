@@ -51,7 +51,7 @@ export default function BookingCheckout() {
     event.preventDefault()
     if (busy) return
     setDepositMismatch(false)
-    if (advanceDeposit && data?.property.depositPercent !== 50) { setDepositMismatch(true); return }
+    if (advanceDeposit && data?.property.depositPercent !== 40) { setDepositMismatch(true); return }
     const provider = ((event.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null)?.value as Provider | undefined
     if (!room || !provider || !form.name.trim() || form.checkIn < today || form.checkOut <= form.checkIn || Number(form.guests) > room.maxGuests || Number(form.guests) < 1) { setError("invalid"); return }
     if ((provider === "paypal" && (!room.bookableUsd || room.rateUsd === null)) || (provider === "mercadopago" && (!room.bookablePen || room.ratePen === null))) { setError("noRate"); return }
@@ -64,7 +64,7 @@ export default function BookingCheckout() {
       if (overlaps(form.checkIn, form.checkOut, latest.unavailable?.[room.id] ?? [])) { setError("conflict"); setRefresh(r => r + 1); return }
       const hold = await casitaRequest<Hold>("/bookings/hold", { method: "POST", body: JSON.stringify({ roomId: room.id, checkIn: form.checkIn, checkOut: form.checkOut, guests: Number(form.guests), guestName: form.name.trim(), guestEmail: form.email.trim(), guestPhone: form.phone.trim() || undefined, guestLang: lang, provider }) })
       if (!hold.publicRef || !Number.isFinite(Date.parse(hold.holdExpiresAt))) throw new Error("Invalid hold response")
-      if (advanceDeposit && (!Number.isFinite(hold.total) || hold.total <= 0 || !Number.isFinite(hold.deposit) || Math.abs(hold.deposit - hold.total * 0.5) > 0.01)) { setDepositMismatch(true); return }
+      if (advanceDeposit && (!Number.isFinite(hold.total) || hold.total <= 0 || !Number.isFinite(hold.deposit) || Math.abs(hold.deposit - hold.total * 0.4) > 0.01)) { setDepositMismatch(true); return }
       const booking = { email: form.email.trim(), checkIn: form.checkIn, checkOut: form.checkOut, hold }
       saveBooking(booking)
       navigate(`/reserva/${encodeURIComponent(hold.publicRef)}`, { state: { booking, startCheckout: true } })

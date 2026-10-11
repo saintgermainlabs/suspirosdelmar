@@ -21,8 +21,12 @@ The form creates a hold with the selected provider, saves reference/email/dates 
 
 Status polling verifies backend status, never the `pago` query parameter. Cancelled and expired bookings cannot reopen checkout; guests start a new booking. Pending holds can retry checkout. Transient status failures stop automatic polling after three failures and provide manual retry.
 
-Bookings with check-in 30 calendar days or more from the guest's local date require a 50% deposit and only offer online checkout. Nearer bookings also offer payment-on-arrival inquiries through n8n; these do not confirm a reservation. The inquiry includes `payment_preference: "on_arrival"` and describes that preference in its message. Viewing appointments link to the existing TidyCal calendar and do not reserve accommodation.
+Bookings with check-in 14 calendar days or more from the guest's local date require a 40% deposit and only offer online checkout. Nearer bookings also offer payment-on-arrival inquiries through n8n; these do not confirm a reservation. The inquiry includes `payment_preference: "on_arrival"` and describes that preference in its message. Viewing appointments link to the existing TidyCal calendar and do not reserve accommodation.
 
-Deposit percentages and amounts remain authoritative in Casita. Configure the property's deposit percentage to 50 before accepting advance bookings. The website blocks advance checkout if Casita advertises a different percentage or returns a hold whose deposit is not 50% of its total. The separate backend must enforce this policy too; frontend controls cannot enforce it against direct API calls. No undocumented deposit or payment-on-arrival fields are sent to the Casita API.
+Deposit percentages and amounts remain authoritative in Casita. Configure the property's deposit percentage to 40 before accepting advance bookings. The website blocks advance checkout if Casita advertises a different percentage or returns a hold whose deposit is not 40% of its total. The separate backend must enforce this policy too; frontend controls cannot enforce it against direct API calls. No undocumented deposit or payment-on-arrival fields are sent to the Casita API.
 
 Live testing requires a deployed API and property ID. Normal tests must mock Casita and must not create real bookings or payments.
+
+## Full payment requirement
+
+Guests should optionally be able to pay the full stay amount now. This is not enabled yet: the available frontend contract only uses checkout `purpose: "deposit"`. Obtain the authoritative Casita full-payment checkout contract before enabling or labeling a full-payment option. Do not guess a checkout purpose or imply that a deposit checkout charges the full total.

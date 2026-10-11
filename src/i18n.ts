@@ -34,8 +34,8 @@ export const t = {
     },
     bookingPolicy: {
       title: "Payment & reservations",
-      advance: "Booking 30 days or more before check-in? A 50% deposit is required to reserve your room. Please continue to the secure payment gateway; the remaining balance is due on arrival.",
-      nearby: "For check-in less than 30 days away, you may pay online or request payment on arrival. An inquiry does not confirm a reservation; we will confirm availability with you.",
+      advance: "Booking 14 days or more before check-in? A 40% deposit is required to reserve your room. Please continue to the secure payment gateway; the remaining balance is due on arrival.",
+      nearby: "For check-in less than 14 days away, you may pay online or request payment on arrival. An inquiry does not confirm a reservation; we will confirm availability with you.",
       chooseDates: "Select your check-in date to see your payment options.",
       gateway: "Continue to secure payment",
       arrival: "Request booking · pay on arrival",
@@ -43,7 +43,7 @@ export const t = {
       viewingTitle: "Would you like to see the place before deciding?",
       viewingDescription: "Book an appointment to visit us before making your decision. Viewing appointments do not reserve a room or overnight stay.",
       viewingLink: "Book a viewing on TidyCal →",
-      depositMismatch: "We cannot offer the required 50% deposit right now. Please contact us before paying.",
+      depositMismatch: "We cannot offer the required 40% deposit right now. Please contact us before paying.",
     },
     payments: {
       title: "Book and pay securely",
@@ -590,8 +590,8 @@ export const t = {
     },
     bookingPolicy: {
       title: "Pagos y reservas",
-      advance: "¿Reservas con 30 días o más de anticipación al check-in? Se requiere un depósito del 50% para reservar tu habitación. Continúa a la pasarela de pago segura; el saldo restante se paga al llegar.",
-      nearby: "Si faltan menos de 30 días para tu check-in, puedes pagar en línea o solicitar pagar al llegar. Una consulta no confirma una reserva; confirmaremos la disponibilidad contigo.",
+      advance: "¿Reservas con 14 días o más de anticipación al check-in? Se requiere un depósito del 40% para reservar tu habitación. Continúa a la pasarela de pago segura; el saldo restante se paga al llegar.",
+      nearby: "Si faltan menos de 14 días para tu check-in, puedes pagar en línea o solicitar pagar al llegar. Una consulta no confirma una reserva; confirmaremos la disponibilidad contigo.",
       chooseDates: "Selecciona tu fecha de check-in para ver las opciones de pago.",
       gateway: "Continuar al pago seguro",
       arrival: "Solicitar reserva · pagar al llegar",
@@ -599,7 +599,7 @@ export const t = {
       viewingTitle: "¿Te gustaría conocer el lugar antes de decidir?",
       viewingDescription: "Agenda una cita para visitarnos antes de tomar tu decisión. Las citas de visita no reservan una habitación ni una estadía.",
       viewingLink: "Agendar una visita en TidyCal →",
-      depositMismatch: "No podemos ofrecer el depósito requerido del 50% en este momento. Contáctanos antes de pagar.",
+      depositMismatch: "No podemos ofrecer el depósito requerido del 40% en este momento. Contáctanos antes de pagar.",
     },
     payments: {
       title: "Reserva y paga de forma segura",
