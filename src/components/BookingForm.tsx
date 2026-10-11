@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { useLang } from "../LanguageContext"
 import { waLink } from "../site"
 import { localDateString, nextDate } from "../utils/dates"
@@ -163,13 +163,6 @@ export default function BookingForm({
         {title || c.formTitle}
       </h2>
       <AvailabilityCalendar open={availabilityOpen} onClose={() => setAvailabilityOpen(false)} />
-      <Link
-        to="/reservar"
-        state={{ checkin: form.checkin, checkout: form.checkout, guests: form.guests }}
-        className="mb-6 block rounded-lg bg-[#d8755b] px-5 py-3 text-center text-sm font-medium text-white hover:bg-[#bd6048] focus-visible:outline-2 focus-visible:outline-offset-2"
-      >
-        {tr.payments.open}
-      </Link>
 
       {sent ? (
         <div className="bg-[#ede8df] border border-[#d6cdb8] rounded-lg p-8 text-center">
