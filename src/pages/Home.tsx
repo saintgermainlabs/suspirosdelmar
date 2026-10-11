@@ -1,5 +1,6 @@
 import SiteImage from "../components/SiteImage"
 import DatePicker from "../components/DatePicker"
+import HeroSun from "../components/HeroSun"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
@@ -72,7 +73,10 @@ export default function Home() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#1b4d6e]/40 via-transparent to-[#1a1714]/70" />
 
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto fade-up">
+        <div className="relative z-10 isolate text-center px-6 max-w-4xl mx-auto fade-up">
+          <div className="absolute inset-0 -z-10">
+            <HeroSun />
+          </div>
           <p className="text-[#d6cdb8] text-sm uppercase tracking-widest mb-4 font-medium">
             {h.location}
           </p>
