@@ -34,8 +34,8 @@ export default function TidyCalModal({
   const activeRoomId = roomId || pickedRoomId || undefined
 
   const room = activeRoomId ? getRoomBySlug(activeRoomId) : undefined
-  const embedUrl = getTidycalUrl(activeRoomId)
-  const directUrl = getTidycalUrl(activeRoomId, false)
+  const embedUrl = getTidycalUrl()
+  const directUrl = getTidycalUrl(false)
 
   useEffect(() => {
     setLoaded(false)
