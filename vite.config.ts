@@ -2,6 +2,7 @@ import { defineConfig, type HtmlTagDescriptor, type Plugin } from "vite"
 import react from "@vitejs/plugin-react"
 import tailwindcss from "@tailwindcss/vite"
 import path from "node:path"
+import dyadComponentTagger from "@dyad-sh/react-vite-component-tagger"
 
 import siteConfiguration from "./.figma/make/site.json"
 
@@ -18,7 +19,7 @@ export default defineConfig(({ mode }) => {
       sourcemap: emitSourcemaps ? "inline" : false,
       minify: !emitSourcemaps,
     },
-    plugins: [
+    plugins: [dyadComponentTagger(), 
       react(),
       tailwindcss(),
       figmaSiteConfiguration(siteConfiguration),
@@ -380,6 +381,7 @@ function figmaMakeKitPlugin(options: {
 <div id="figma-make-kit-root"></div>
 <script type="module">
   import { stories } from 'virtual:figma-stories'
+import dyadComponentTagger from '@dyad-sh/react-vite-component-tagger';
   window.__FIGMA__ = Object.assign(window.__FIGMA__ ?? {}, { stories })
   window.dispatchEvent(new CustomEvent('figma.ready'))
 </script>

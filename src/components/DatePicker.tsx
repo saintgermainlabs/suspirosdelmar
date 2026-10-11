@@ -11,9 +11,11 @@ interface DatePickerProps {
   required?: boolean
   className: string
   onChange: (value: string) => void
+  /** When set, clicking the field calls this (e.g. TidyCal popup) instead of opening the built-in calendar. */
+  onTriggerClick?: () => void
 }
 
-export default function DatePicker({ id, name, value, min, max, required, className, onChange }: DatePickerProps) {
+export default function DatePicker({ id, name, value, min, max, required, className, onChange, onTriggerClick }: DatePickerProps) {
   const { lang, tr } = useLang()
   const c = tr.datePicker
   const dialog = useRef<HTMLDialogElement>(null)
@@ -45,7 +47,7 @@ export default function DatePicker({ id, name, value, min, max, required, classN
         type="button"
         aria-haspopup="dialog"
         aria-controls={`${id}-calendar`}
-        onClick={open}
+        onClick={onTriggerClick ?? open}
         className={`${className} flex items-center justify-between gap-3 text-left cursor-pointer`}
       >
         <span>{value ? new Date(`${value}T12:00:00`).toLocaleDateString(locale) : c.placeholder}</span>

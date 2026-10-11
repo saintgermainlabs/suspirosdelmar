@@ -4,6 +4,8 @@ import { useLang } from "../LanguageContext"
 import { waLink } from "../site"
 import { localDateString, nextDate } from "../utils/dates"
 import DatePicker from "./DatePicker"
+import TidyCalModal from "./TidyCalModal"
+import { roomIdFromIndex } from "../data/tidycal"
 
 export interface BookingFormProps {
   defaultRoomIndex?: string
@@ -47,6 +49,17 @@ export default function BookingForm({
   const [sent, setSent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Clicking a date field opens the TidyCal booking popup for the selected
+  // unit; "manual" mode falls back to the built-in DatePicker for inquiries.
+  const [calendarOpen, setCalendarOpen] = useState(false)
+  const [manualDates, setManualDates] = useState(false)
+  const openBooking = manualDates ? undefined : () => setCalendarOpen(true)
+  const handleManualDates = () => {
+    setManualDates(true)
+    setCalendarOpen(false)
+    setTimeout(() => document.getElementById("b-checkin")?.click(), 0)
+  }
+  const tc = tr.tidycal
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -266,6 +279,7 @@ export default function BookingForm({
                 max={maxDateStr}
                 value={form.checkin}
                 onChange={(value) => setForm({ ...form, checkin: value, checkout: form.checkout > value ? form.checkout : "" })}
+                onTriggerClick={openBooking}
                 className={`${inputClass} cursor-pointer`}
               />
             </div>
@@ -284,9 +298,22 @@ export default function BookingForm({
                 min={checkoutMin}
                 max={maxDateStr}
                 onChange={(value) => setForm({ ...form, checkout: value })}
+                onTriggerClick={openBooking}
                 className={`${inputClass} cursor-pointer`}
               />
             </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setCalendarOpen(true)}
+              aria-haspopup="dialog"
+              className="inline-flex shrink-0 whitespace-nowrap items-center justify-center gap-2 border border-[#4a8fa3] text-[#1b4d6e] hover:bg-[#4a8fa3] hover:text-white font-medium px-5 py-2.5 rounded transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4a8fa3]"
+            >
+              <span aria-hidden="true">📅</span> {tc.checkAvailability}
+            </button>
+            <p className="text-xs text-[#6b6355]">{tc.datesHint}</p>
           </div>
 
           <div>
@@ -351,6 +378,13 @@ export default function BookingForm({
           <p className="text-xs text-[#6b6355] text-center">{f.note}</p>
         </form>
       )}
+
+      <TidyCalModal
+        open={calendarOpen}
+        onClose={() => setCalendarOpen(false)}
+        roomId={roomIdFromIndex(form.roomIndex)}
+        onManualDates={handleManualDates}
+      />
     </div>
   )
 }

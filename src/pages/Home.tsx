@@ -1,5 +1,7 @@
 import SiteImage from "../components/SiteImage"
 import DatePicker from "../components/DatePicker"
+import TidyCalModal from "../components/TidyCalModal"
+import { roomIdFromIndex } from "../data/tidycal"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
@@ -34,6 +36,17 @@ export default function Home() {
   maxDate.setFullYear(maxDate.getFullYear() + 3)
   const maxDateStr = localDateString(maxDate)
   const checkoutMin = nextDate(form.checkin || todayStr)
+
+  // Clicking a date field opens the TidyCal booking popup for the selected
+  // unit; "manual" mode falls back to the built-in DatePicker for inquiries.
+  const [calendarOpen, setCalendarOpen] = useState(false)
+  const [manualDates, setManualDates] = useState(false)
+  const openBooking = manualDates ? undefined : () => setCalendarOpen(true)
+  const handleManualDates = () => {
+    setManualDates(true)
+    setCalendarOpen(false)
+    setTimeout(() => document.getElementById("home-checkin")?.click(), 0)
+  }
 
   const handleBookSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -128,6 +141,7 @@ export default function Home() {
                 required
                 value={form.checkin}
                 onChange={(value) => setForm({ ...form, checkin: value, checkout: form.checkout > value ? form.checkout : "" })}
+                onTriggerClick={openBooking}
                 className="w-full border border-[#d6cdb8] rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#4a8fa3] cursor-pointer"
               />
             </div>
@@ -145,6 +159,7 @@ export default function Home() {
                 min={checkoutMin}
                 max={maxDateStr}
                 onChange={(value) => setForm({ ...form, checkout: value })}
+                onTriggerClick={openBooking}
                 className="w-full border border-[#d6cdb8] rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#4a8fa3] cursor-pointer"
               />
             </div>
@@ -201,6 +216,12 @@ export default function Home() {
             </button>
           </div>
         </form>
+  <TidyCalModal
+          open={calendarOpen}
+          onClose={() => setCalendarOpen(false)}
+          roomId={roomIdFromIndex(form.roomIndex)}
+          onManualDates={handleManualDates}
+        />
       </section>
 
       {/* Highlights */}

@@ -370,6 +370,19 @@ export const t = {
     },
 
     // Contact
+    // TidyCal booking calendar popup
+    tidycal: {
+      tag: "Online booking",
+      title: "Check availability",
+      checkAvailability: "Check availability",
+      pickRoom: "Choose a room or apartment…",
+      close: "Close booking calendar",
+      loading: "Loading booking calendar…",
+      iframeTitle: "Los Suspiros del Mar booking calendar",
+      manualDates: "Just send a request? Enter dates manually",
+      openNewTab: "Open calendar in a new tab ↗",
+      datesHint: "Tap the dates to see live availability and book online.",
+    },
     contact: {
       submissionError: "Something went wrong. You can contact us directly on WhatsApp.",
       tag: "Get in touch",
@@ -816,6 +829,19 @@ export const t = {
       ctaBtn: "Hacer una reserva",
     },
 
+    // TidyCal booking calendar popup
+    tidycal: {
+      tag: "Reserva en línea",
+      title: "Ver disponibilidad",
+      checkAvailability: "Ver disponibilidad",
+      pickRoom: "Elige una habitación o el apartamento…",
+      close: "Cerrar calendario de reservas",
+      loading: "Cargando calendario de reservas…",
+      iframeTitle: "Calendario de reservas de Los Suspiros del Mar",
+      manualDates: "¿Solo quieres enviar una consulta? Ingresa las fechas manualmente",
+      openNewTab: "Abrir calendario en otra pestaña ↗",
+      datesHint: "Toca las fechas para ver la disponibilidad real y reservar en línea.",
+    },
     contact: {
       submissionError: "Ocurrió un inconveniente. Puedes contactarnos directamente por WhatsApp.",
       tag: "Contáctanos",

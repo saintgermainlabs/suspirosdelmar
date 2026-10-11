@@ -17,6 +17,7 @@
     "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
+    "@dyad-sh/react-vite-component-tagger": "^0.9.0",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/vite": "^4.0.0",
     "@testdino/playwright": "2.7.6",
