@@ -8,7 +8,6 @@ export default function Nav() {
   const navigate = useNavigate()
 
   const links = [
-    { label: tr.nav.home, path: "/" },
     { label: tr.nav.rooms, path: "/rooms" },
     { label: tr.nav.experiences, path: "/experiences" },
     { label: tr.nav.gallery, path: "/gallery" },
@@ -21,7 +20,8 @@ export default function Nav() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link
           to="/"
-          aria-label="Los Suspiros del Mar"
+          onClick={() => setOpen(false)}
+          aria-label={`Los Suspiros del Mar — ${tr.nav.home}`}
           className="flex items-center gap-2 font-display text-[#1b4d6e] hover:opacity-80 transition-opacity shrink-0"
         >
           <img src="/assets/logo-wave.svg" alt="" width="40" height="40" className="h-9 w-9 sm:h-10 sm:w-10" />
