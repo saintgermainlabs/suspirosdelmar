@@ -3,10 +3,10 @@ export type Lang = "en" | "es"
 export const t = {
   en: {
     apartmentViewing: {
-      tag: "Apartment viewings",
-      title: "Come see the apartment",
-      description: "Schedule an appointment to visit the apartment in person. This calendar is only for viewings, not overnight stays or accommodation reservations.",
-      openNewTab: "Schedule your viewing in a new tab →",
+      tag: "Viewings & calls",
+      title: "Visit the apartment or book a call",
+      description: "Schedule an appointment to see the apartment in person or book a call with us. This calendar is for appointments only, not overnight stays or accommodation reservations.",
+      openNewTab: "Schedule your appointment in a new tab →",
     },
     payments: {
       title: "Book and pay securely",
@@ -515,10 +515,10 @@ export const t = {
 
   es: {
     apartmentViewing: {
-      tag: "Visitas al apartamento",
-      title: "Ven a conocer el apartamento",
-      description: "Agenda una cita para visitar el apartamento en persona. Este calendario es solo para visitas, no para estadías ni reservas de alojamiento.",
-      openNewTab: "Agenda tu visita en una nueva pestaña →",
+      tag: "Visitas y llamadas",
+      title: "Visita el apartamento o agenda una llamada",
+      description: "Agenda una cita para conocer el apartamento en persona o una llamada con nosotros. Este calendario es solo para citas, no para estadías ni reservas de alojamiento.",
+      openNewTab: "Agenda tu cita en una nueva pestaña →",
     },
     payments: {
       title: "Reserva y paga de forma segura",
