@@ -11,11 +11,12 @@ interface DatePickerProps {
   required?: boolean
   className: string
   onChange: (value: string) => void
+  isDateDisabled?: (date: string) => boolean
   /** When set, clicking the field calls this (e.g. TidyCal popup) instead of opening the built-in calendar. */
   onTriggerClick?: () => void
 }
 
-export default function DatePicker({ id, name, value, min, max, required, className, onChange, onTriggerClick }: DatePickerProps) {
+export default function DatePicker({ id, name, value, min, max, required, className, onChange, onTriggerClick, isDateDisabled }: DatePickerProps) {
   const { lang, tr } = useLang()
   const c = tr.datePicker
   const dialog = useRef<HTMLDialogElement>(null)
@@ -96,7 +97,7 @@ export default function DatePicker({ id, name, value, min, max, required, classN
           {Array.from({ length: first.getDay() }, (_, index) => <span key={`empty-${index}`} />)}
           {Array.from({ length: days }, (_, index) => {
             const date = `${month}-${String(index + 1).padStart(2, "0")}`
-            const disabled = date < min || date > max
+            const disabled = date < min || date > max || Boolean(isDateDisabled?.(date))
             return (
               <button
                 key={date}
