@@ -162,14 +162,6 @@ export default function BookingForm({
       <h2 className="font-display text-2xl md:text-3xl text-[#1b4d6e] mb-6">
         {title || c.formTitle}
       </h2>
-      <button
-        type="button"
-        aria-haspopup="dialog"
-        onClick={() => setAvailabilityOpen(true)}
-        className="mb-3 flex w-full items-center justify-center gap-2 rounded-lg border border-[#4a8fa3] bg-[#1b4d6e] px-5 py-3 text-sm font-medium text-white hover:bg-[#4a8fa3] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4a8fa3]"
-      >
-        <span aria-hidden="true">▦</span> {tr.availability.button}
-      </button>
       <AvailabilityCalendar open={availabilityOpen} onClose={() => setAvailabilityOpen(false)} />
       <Link
         to="/reservar"
@@ -379,6 +371,14 @@ export default function BookingForm({
               ))}
             </select>
             {fieldErrors.roomIndex && <p id="b-room-error" role="alert" className="mt-1 text-xs text-red-600">{fieldErrors.roomIndex}</p>}
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => setAvailabilityOpen(true)}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-[#4a8fa3] bg-[#1b4d6e] px-5 py-3 text-sm font-medium text-white hover:bg-[#4a8fa3] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4a8fa3]"
+            >
+              <span aria-hidden="true">▦</span> {tr.availability.button}
+            </button>
           </div>
 
           <div>
